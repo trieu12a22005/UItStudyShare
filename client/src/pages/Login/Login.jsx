@@ -2,40 +2,45 @@ import React from "react";
 import { Button, Checkbox, Form, Input } from "antd";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-const onFinish = async (values) => {
-  try {
-    const response = await fetch("http://localhost:3055/api/v1/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email, // ✅ Lấy từ form
-        password: values.password, // ✅ Lấy từ form
-      }),
-      credentials: "include",
-    });
-
-    const result = await response.json();
-    if (!response.ok) {
-      throw new Error(`Lỗi ${result.code}: ${result.message}`);
-    }
-
-    if (result) {
-      console.log(result)
-      toast.success("Đăng nhập thành công");
-
-    }
-  } catch (error) {
-    toast.error(`Đăng nhập thất bại: ${error.message}`);
-  }
-};
-
-const onFinishFailed = (errorInfo) => {
-  console.log("Failed:", errorInfo);
-};
+import { useAuth } from "../../hooks/AuthContext.jsx";
 
 function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const onFinish = async (values) => {
+    try {
+      const response = await fetch("http://localhost:3055/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`Lỗi ${result.code}: ${result.message}`);
+      }
+
+      if (result) {
+        toast.success("Đăng nhập thành công");
+        login();               
+        navigate("/");    
+      }
+    } catch (error) {
+      toast.error(`Đăng nhập thất bại: ${error.message}`);
+    }
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
   return (
     <div className="flex h-screen">
       <div className="flex-[6]">

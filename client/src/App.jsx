@@ -5,6 +5,12 @@ import Otp from "./pages/otp/otp.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/Login/resetPassword/resetPassword.jsx";
+import Header from "./components/Headers/Header.jsx";
+import Home from "./pages/Home/Home.jsx";
+import Post from "./components/Post/Post.jsx";
+import Profile from "./pages/Profile/Profile.jsx";
+import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
+import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 function App() {
   return (
     <>
@@ -14,7 +20,12 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<Otp />} />
         <Route path="reset-password" element={<ResetPassword />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/password/change" element={<ChangePassword />} />
+        <Route path="/profile/edit" element= {<EditProfile />} />
       </Routes>
+      {/* <Post /> */}
     </>
   );
 }

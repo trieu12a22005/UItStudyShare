@@ -1,0 +1,46 @@
+// Pagination.scss
+:where(.css-dev-only-do-not-override-1rqnfsa).ant-pagination {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+  
+    .ant-pagination-item {
+      border: none;
+      background: #f2f2f2;
+      color: #333;
+      font-weight: 500;
+      border-radius: 8px;
+      min-width: 36px;
+      height: 36px;
+      line-height: 36px;
+  
+      a {
+        color: inherit;
+      }
+  
+      &:hover {
+        background: #d8eafd;
+        a {
+          color: #007bff;
+        }
+      }
+    }
+  
+    .ant-pagination-item-active {
+      background: linear-gradient(to right, #7f5af0, #00cfff);
+      color: white;
+  
+      a {
+        color: white;
+        font-weight: bold;
+      }
+    }
+  
+    .ant-pagination-prev,
+    .ant-pagination-next {
+      .ant-pagination-item-link {
+        border-radius: 8px;
+      }
+    }
+  }
+  

@@ -11,6 +11,7 @@
         margin: 0 auto;
     }
     &__item {
+        padding: 10px;
         width: 30%;
         margin: 1%;
         background: #fff;
@@ -27,8 +28,10 @@
     }
 
     &__image img {
-        width: 100%;
-        height: auto;
+        // text-align: center;
+        margin: 0 auto;
+        width: 80%;
+        height: 265px;
         object-fit: cover;
         border-bottom: 1px solid #eee;
     }

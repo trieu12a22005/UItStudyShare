@@ -6,13 +6,9 @@ import "./Post.scss";
 
 
 function Post() {
-    const postsPerPage = 6;
-    const [currentPage, setCurrentPage] = useState(0);
+
     const [post, setPost] = useState([]);
 
-    const offset = currentPage * postsPerPage;
-    const currentPosts = post.slice(offset, offset + postsPerPage);
-    // const pageCount = Math.ceil(post.length / postsPerPage);
 
     useEffect(() => {
         const fetchApi = async () => {
@@ -21,22 +17,15 @@ function Post() {
         };
         fetchApi();
     }, []);
-
+    console.log(post)
     return (
         <>
             <div className="post__list">
-                {currentPosts.map(item => (
-                    <PostItem key={item.id} props={{ item }} />
+                {post.map(item => (
+                    <PostItem key={item._id} props={{ item }} />
                 ))}
             </div>
-            <div className="pagination__wrapper">
-                <Paginations
-                    current={currentPage}
-                    total={post.length}
-                    pageSize={postsPerPage}
-                    onChange={(page) => setCurrentPage(page)}
-                />
-            </div>
+
 
         </>
     );

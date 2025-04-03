@@ -11,6 +11,7 @@ import Post from "./components/Post/Post.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
+import DocumentDetail from "./components/DocumentDetail/DocumentDetail.jsx";
 function App() {
   return (
     <>
@@ -24,8 +25,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/password/change" element={<ChangePassword />} />
         <Route path="/profile/edit" element= {<EditProfile />} />
+        <Route path="/document/detail/:id"  element={<DocumentDetail />} />
       </Routes>
-      {/* <Post /> */}
+      <Post />
     </>
   );
 }

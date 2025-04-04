@@ -6,11 +6,10 @@ import DocumentContent from '../DocumentContent/DocumentContent';
 import AuthorInfo from '../AuthorInfo/AuthorInfo';
 import RelatedDocument from '../RelatedDocument/RelatedDocument';
 import Statistics from '../Statistics/Statistics';
-import DocumentHeader from '../DocumentHeader/DocumentHeader';
+
 const DocumentDetail = () => {
   return (
     <>
-    <DocumentHeader />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content */}
         <div className="lg:col-span-2">

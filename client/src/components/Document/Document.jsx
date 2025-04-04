@@ -1,27 +1,27 @@
 import { useEffect, useState } from "react";
 import { getPost } from "../Service/postService";
-import PostItem from "./PostItem";
+import PostItem from "./DocumentItem";
 import Paginations from "../Pagination/Pagination";
-import "./Post.scss";
+import "./Document.scss";
 
 
-function Post() {
+function Document() {
 
-    const [post, setPost] = useState([]);
+    const [document, setdocument] = useState([]);
 
 
     useEffect(() => {
         const fetchApi = async () => {
             const result = await getPost();
-            setPost(result);
+            setdocument(result);
         };
         fetchApi();
     }, []);
-    console.log(post)
+    console.log(document)
     return (
         <>
-            <div className="post__list">
-                {post.map(item => (
+            <div className="document__list">
+                {document.map(item => (
                     <PostItem key={item._id} props={{ item }} />
                 ))}
             </div>
@@ -30,4 +30,4 @@ function Post() {
         </>
     );
 }
-export default Post;  
+export default Document;  

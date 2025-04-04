@@ -1,7 +1,7 @@
 import { Button, Checkbox, Form, Input, DatePicker } from "antd";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import "tailwindcss"
+
 export default function Register() {
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ export default function Register() {
   
   return (
     <div className="flex justify-center max-h-screen">
-      <div className="flex flex-col flex-[5] justify-center px-[130px] mt-[50px] mb-[50px]" style={{marginRight:"50px"}}>
+      <div className="flex flex-col flex-[5] justify-center px-[130px] mt-[50px] mb-[50px]">
         <h1 className="text-4xl font-bold mb-4 text-center text-[#ff3a34]">
           Sign up for UIT StudyShare
         </h1>
@@ -186,7 +186,7 @@ export default function Register() {
           </p>
         </div>
       </div>
-      <div>
+      <div className="flex-[5]">
         <img src="image_2.png" alt="login" className="h-screen" />
       </div>
     </div>

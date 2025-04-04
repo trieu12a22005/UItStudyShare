@@ -2,34 +2,34 @@ import { IoDocumentAttachOutline } from "react-icons/io5";
 import { FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-function PostItem({ props }) {
+function DocumentItem({ props }) {
     const { item } = props;
     const navigate = useNavigate();
     const handleClick =() => {
-        navigate(`document/detail/${item._id}`);
+        navigate(`/document/detail/${item._id}`);
         console.log(item._id);
     }
     return (
-        <div className="post__item" onClick={handleClick}>
-            <div className="post__image">
+        <div className="document__item" onClick={handleClick}>
+            <div className="document__image">
                 <img src="image.png" alt="tai lieu" />
             </div>
 
-            <div className="post__content">
-                <h3 className="post__title">{item.title}</h3>
+            <div className="document__content">
+                <h3 className="document__title">{item.title}</h3>
 
-                <div className="post__info">
+                <div className="document__info">
                     {/* <p className="post__price">
                         <IoDocumentAttachOutline />{" "}
                         <span>{item.price}</span> tài liệu
                     </p> */}
-                    <p className="post__downloads">
+                    <p className="document__downloads">
                         <FaDownload />{" "}
                         <span>{item.downloadCount}</span> lượt tải xuống
                     </p>
                 </div>
 
-                <div className="post__btn">
+                <div className="document__btn">
                     <button>Chi tiết</button>
                 </div>
             </div>
@@ -37,4 +37,4 @@ function PostItem({ props }) {
     );
 }
 
-export default PostItem;
+export default DocumentItem;

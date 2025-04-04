@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 html {
   scroll-behavior: smooth;
@@ -11,3 +16,34 @@ html {
     text-decoration: none;
     
   }
+
+  .document-container {
+    background-color: #f8fafc;
+    min-height: calc(100vh - 64px);
+  }
+  
+  .document-actions button {
+    transition: all 0.2s ease;
+  }
+  .document-actions button:hover {
+    transform: translateY(-2px);
+  }
+  .comment-box {
+    transition: all 0.3s ease;
+  }
+  .comment-box:focus-within {
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  }
+  .related-doc:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+  .tab-button.active {
+    border-bottom: 3px solid #3b82f6;
+    color: #3b82f6;
+    font-weight: 600;
+  }
+  .rating-star:hover {
+    transform: scale(1.2);
+  }
+  

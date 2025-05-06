@@ -10,6 +10,7 @@ function Login() {
 
   const onFinish = async (values) => {
     try {
+      // Gọi API đăng nhập
       const response = await fetch("http://localhost:3055/api/v1/users/login", {
         method: "POST",
         headers: {
@@ -19,23 +20,43 @@ function Login() {
           email: values.email,
           password: values.password,
         }),
-        credentials: "include",
+        credentials: "include", // gửi cookie để đăng nhập
       });
-
+  
       const result = await response.json();
+  
       if (!response.ok) {
         throw new Error(`Lỗi ${result.code}: ${result.message}`);
       }
-
-      if (result) {
-        toast.success("Đăng nhập thành công");
-        login();               
-        navigate("/");    
+  
+      toast.success("Đăng nhập thành công");
+  
+      // 🔁 Gọi API /users/detail để lấy thông tin user
+      const userRes = await fetch("http://localhost:3055/api/v1/users/detail", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+  
+      const userData = await userRes.json();
+  
+      if (!userRes.ok) {
+        throw new Error("Không lấy được thông tin người dùng");
       }
+  
+      console.log("✅ Thông tin user:", userData);
+  
+      login(userData); // 👉 cập nhật vào context
+      localStorage.setItem("user", JSON.stringify(userData)); // nếu bạn muốn lưu lại
+  
+      navigate("/");
+  
     } catch (error) {
+      console.error("Login error:", error);
       toast.error(`Đăng nhập thất bại: ${error.message}`);
     }
   };
+  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);

@@ -9,9 +9,10 @@ import Profile from "./pages/Profile/Profile.jsx";
 import Home from "./pages/Home/Home.jsx";
 import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
-import DocumentDetail from "./components/DocumentDetail/DocumentDetail.jsx";
-import Document from "./components/Document/Document.jsx";
+import Document from "./pages/Document/Document.jsx";
 import Header from "./components/Headers/Header.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import DocumentDetail from "./pages/DocumentDetail/DocumentDetail.jsx";
 function App() {
   return (
     <>

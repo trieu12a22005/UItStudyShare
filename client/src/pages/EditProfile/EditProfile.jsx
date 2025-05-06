@@ -75,7 +75,7 @@ function EditProfile() {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const response = await fetch("http://localhost:3055/api/v1/users/update ", {
+    const response = await fetch("http://localhost:3055/api/v1/users/update", {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const handleSubmit = async (e) => {
             <h2>Edit Profile</h2>
             <form onSubmit={handleSubmit}>
                 <div className="form-avatar">
-                    <img src={formData.avatarUrl || "img/cat1.png"} alt="Avatar" className="avatar-preview" />
+                    <img src={formData.avatarUrl || "/img/cat1.png"} alt="Avatar" className="avatar-preview" />
                     <label htmlFor="avatar-upload" className="avatar-upload-btn">
                         Chọn ảnh
                     </label>

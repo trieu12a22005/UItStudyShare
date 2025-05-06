@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { ConfigProvider, Dropdown, Space, Menu, Badge, Avatar } from 'antd';
+import {
+  ConfigProvider,
+  Dropdown,
+  Space,
+  Menu,
+  Badge,
+  Avatar,
+} from 'antd';
 import {
   SearchOutlined,
   QuestionCircleOutlined,
@@ -21,7 +28,7 @@ const menuItems = [
 
 function Header() {
   const [current, setCurrent] = useState('home');
-  const { isLogin, logout } = useAuth() || {}; // chống lỗi nếu context null
+  const { isLogin, logout, user } = useAuth() || {}; // lấy user từ context
   const navigate = useNavigate();
 
   const onClick = (e) => {
@@ -59,9 +66,9 @@ function Header() {
     },
   ];
 
-  const handleUserMenuClick = ({ key }) => {
+  const handleUserMenuClick = async ({ key }) => {
     if (key === 'logout') {
-      logout();
+      await logout();
       navigate('/');
     } else if (key === 'profile') {
       navigate('/profile');
@@ -71,6 +78,8 @@ function Header() {
   };
 
   return (
+    <div className="bg-white shadow">
+  <div className="max-w-screen-xl mx-auto px-4">
     <ConfigProvider
       theme={{
         components: {
@@ -83,13 +92,22 @@ function Header() {
       }}
     >
       <div className="layout__menu">
-        <img src="/img/image.png" alt="Logo" className="layout__menu-img" />
+        <img
+          src="/img/image.png"
+          alt="Logo"
+          className="layout__menu-img"
+        />
         <Menu
           onClick={onClick}
           selectedKeys={[current]}
           mode="horizontal"
           items={menuItems}
-          style={{ height: '60px', fontSize: '18px', marginTop: '10px', flex: 1 }}
+          style={{
+            height: '60px',
+            fontSize: '18px',
+            marginTop: '10px',
+            flex: 1,
+          }}
         />
         {isLogin ? (
           <div className="layout__menu-tool">
@@ -118,9 +136,13 @@ function Header() {
                   cursor: 'pointer',
                 }}
               >
-                <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} size={28} />
+                <Avatar
+                  style={{ backgroundColor: '#87d068' }}
+                  icon={<UserOutlined />}
+                  size={28}
+                />
                 <Space>
-                  <b>Mẫn Nhi</b>
+                  <b>{user?.fullName || 'Người dùng'}</b>
                   <DownOutlined />
                 </Space>
               </div>
@@ -131,6 +153,8 @@ function Header() {
         )}
       </div>
     </ConfigProvider>
+    </div>
+  </div>
   );
 }
 

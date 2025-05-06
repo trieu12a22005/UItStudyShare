@@ -4,7 +4,7 @@ function Footer ()
 {
   return (
     <>
-    <footer className="bg-gray-800 text-white py-8">
+    <footer className="bg-gray-800 text-white py-4">
   <div className="container mx-auto px-4">
     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
       <div>
@@ -12,7 +12,7 @@ function Footer ()
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white mr-2">
             <i className="fas fa-book-open" />
           </div>
-          EduShare
+          UIT Share
         </h3>
         <p className="text-gray-400 text-sm">Nền tảng chia sẻ tài liệu học tập cho giáo viên và sinh viên Việt
           Nam.</p>
@@ -51,11 +51,11 @@ function Footer ()
             <i className="fab fa-instagram" />
           </a>
         </div>
-        <p className="text-gray-400 text-sm">Email: support@edushare.vn</p>
+        <p className="text-gray-400 text-sm">Email: support@uitshare.vn</p>
       </div>
     </div>
     <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-      <p>© 2023 EduShare. Bảo lưu mọi quyền.</p>
+      <p>© 2023 UITShare. Bảo lưu mọi quyền.</p>
     </div>
   </div>
 </footer>

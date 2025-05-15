@@ -1,7 +1,6 @@
 // src/pages/DocumentDetail.jsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
 import { getDocumentById } from '../../components/Service/DocumentService';
 
 import DocumentContent from '../../components/DocumentContent/DocumentContent';
@@ -11,43 +10,47 @@ import RelatedDocument from '../../components/RelatedDocument/RelatedDocument';
 import Statistics from '../../components/Statistics/Statistics';
 import DocumentHeader from '../../components/DocumentHeader/DocumentHeader';
 import "./DocumentDetail.css";
-import { clearDocument, setDocument } from '../../redux/slices/DocumentSilce';
 
 const DocumentDetail = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const document = useSelector((state) => state.document.currentDocument);
+  const [document, setDocument] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDocument = async () => {
       try {
         const data = await getDocumentById(id);
-        dispatch(setDocument(data));
+        setDocument(data);
       } catch (error) {
         console.error("Lỗi tải chi tiết tài liệu:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchDocument();
-    return () => dispatch(clearDocument()); // clear khi thoát trang
-  }, [id, dispatch]);
+  }, [id]);
+
+  if (loading) {
+    return <div className="text-center py-10 text-gray-600">Đang tải tài liệu...</div>;
+  }
 
   if (!document) {
-    return <div className="text-center py-10 text-gray-600">Đang tải tài liệu...</div>;
+    return <div className="text-center py-10 text-red-500">Không tìm thấy tài liệu.</div>;
   }
 
   return (
     <div className="w-[70%] mx-auto">
-      <DocumentHeader />
+      <DocumentHeader document={document} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
-          <DocumentContent />
+          <DocumentContent document={document} />
           <CommentBox />
         </div>
         <div className="space-y-6">
-          <AuthorInfo />
-          <RelatedDocument />
-          <Statistics />
+          <AuthorInfo document={document} />
+          <RelatedDocument document={document} />
+          <Statistics document={document} />
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ export const getDocument = async () => {
 };
 
 export const getDocumentById = async (id) => {
-  const result = await get(`document/${id}`);
+  const result = await get(`document/detail/${id}`);
   return result;
 };
+

@@ -8,6 +8,7 @@ function DocumentItem({ props }) {
     const handleClick =() => {
         navigate(`/document/detail/${item._id}`);
         console.log(item._id);
+        console.log("📄 document item:", item);
     }
     return (
         <div className="document__item" onClick={handleClick}>

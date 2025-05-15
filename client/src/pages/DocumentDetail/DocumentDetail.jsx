@@ -20,7 +20,8 @@ const DocumentDetail = () => {
     const fetchDocument = async () => {
       try {
         const data = await getDocumentById(id);
-        setDocument(data);
+        setDocument(data.document); // ✅ bóc đúng object cần thiết
+
       } catch (error) {
         console.error("Lỗi tải chi tiết tài liệu:", error);
       } finally {

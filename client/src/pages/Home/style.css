@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+    
+  }
+  
+  .uit-all {
+    font-family: Arial, sans-serif;
+    background-color: #e0f2fe;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .uit-container {
+    background-color: #3188F2;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 16px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (min-width: 768px) {
+    .uit-container {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+  
+  .uit-left {
+    flex: 1;
+    margin-bottom: 20px;
+  }
+  
+  .uit-title {
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  
+  .uit-subtitle {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .uit-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 500px) {
+    .uit-buttons {
+      flex-direction: row;
+    }
+  }
+  
+  .uit-btn {
+    padding: 14px 25px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+  }
+  
+  .uit-btn-white {
+    background-color: white;
+    color: #2563eb;
+  }
+  
+  .uit-btn-white:hover {
+    background-color:#C0EDFF ;
+  }
+  
+  .uit-btn-blue {
+    background-color: #1e3a8a;
+    color: white;
+  }
+  
+  .uit-btn-blue:hover {
+    background-color: #65D7EE;
+  }
+  
+  .uit-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .uit-image {
+    width: 100%;
+    max-width: 400px;
+  }
+  .phan-4{
+    
+    width: 100%;
+    padding: 20px 0;
+    padding-bottom: 20p;
+}
+.phan-4 .container{
+    display: flex;
+    justify-content:center;
+    align-items: center;
+  
+    
+}
+
+.col-xl-3 {
+   
+    max-width: 24%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.phan-4 .inn-box{
+    display: flex;
+    text-align: center;
+}
+.col-xl-3 img {
+    width: 20%; 
+    height: auto; 
+}
+
+.title {
+    font-weight: bold;
+    margin: 10px 0; 
+}
+
+.phan-4 p {
+    font-size: 14px; 
+    color: #555; 
+}
+
+.phan-4 .button-4{
+    background-color:red;
+    padding: 10px;
+    margin: 10px 10px;
+    display: inline-block;
+    border-radius: 45px;
+}
+.phan-4 .button-4 a{
+    text-decoration: none;
+    font-size: 19px;
+    font-weight: 800;
+    color: #FFFFFF;
+
+}
+.phan-4 .button-4:hover{
+    background-color:#DF5E69;
+
+}
+
+  

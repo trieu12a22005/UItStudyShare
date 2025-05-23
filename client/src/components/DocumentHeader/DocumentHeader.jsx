@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 
 function DocumentHeader({ document }) {
   if (!document) return null;
-  console.log("✅ Document nhận vào:", document);
-console.log("✅ Title:", document?.title);
+//   console.log("✅ Document nhận vào:", document);
+// console.log("✅ Title:", document?.title);
 // console.log("🔗 fileUrl:", fileUrl);
 
 
@@ -44,7 +44,7 @@ const handleFavorite = () => {
   const formatDate = (dateStr) => {
     return dateStr ? new Date(dateStr).toLocaleDateString("vi-VN") : "Chưa rõ ngày";
   };
-console.log("🔗 fileUrl:", fileUrl);
+// console.log("🔗 fileUrl:", fileUrl);
   return (
     <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
       <div className="flex flex-col md:flex-row">

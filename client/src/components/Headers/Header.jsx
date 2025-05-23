@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom';
 
 const menuItems = [
   { label: 'Trang chủ', key: 'home' },
-  { label: 'Trang tài liệu', key: 'document' },
+  { label: 'Trang tài liệu', key: 'documents' },
   { label: 'Trang đề thi', key: 'test' },
   { label: 'Cộng đồng', key: 'community' },
 ];
@@ -37,8 +37,8 @@ function Header() {
       case 'home':
         navigate('/');
         break;
-      case 'document':
-        navigate('/document');
+      case 'documents':
+        navigate('/documents');
         break;
       case 'test':
         navigate('/test');

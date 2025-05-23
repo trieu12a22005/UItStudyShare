@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/AuthContext";
 import { Link } from "react-router-dom";
 import DocumentItem from "./DocumentItem";
 import "./Document.scss";
+import Footer from "../../components/Footer/Footer";
 
 function Document() {
   const { isLogin } = useAuth();
@@ -62,6 +63,7 @@ function Document() {
   }
 
   return (
+ <>
     <div className="document__list">
       {document.length > 0 ? (
         document.map((item) => (
@@ -71,6 +73,8 @@ function Document() {
         <p className="text-center text-gray-500">Không có tài liệu nào.</p>
       )}
     </div>
+    <Footer />
+ </>
   );
 }
 

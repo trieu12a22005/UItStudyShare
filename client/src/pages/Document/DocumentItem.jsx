@@ -3,39 +3,81 @@ import { FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 function DocumentItem({ props }) {
-    const { item } = props;
-    const navigate = useNavigate();
-    const handleClick =() => {
-        navigate(`/document/detail/${item._id}`);
-        console.log(item._id);
-        console.log("📄 document item:", item);
-    }
-    return (
-        <div className="document__item" onClick={handleClick}>
-            <div className="document__image">
-                <img src="image.png" alt="tai lieu" />
-            </div>
+  const { item } = props;
+  const navigate = useNavigate();
 
-            <div className="document__content">
-                <h3 className="document__title">{item.title}</h3>
+  const handleClick = () => {
+    navigate(`/documents/detail/${item._id}`);
+    console.log(item._id);
+  };
 
-                <div className="document__info">
-                    {/* <p className="post__price">
-                        <IoDocumentAttachOutline />{" "}
-                        <span>{item.price}</span> tài liệu
-                    </p> */}
-                    <p className="document__downloads">
-                        <FaDownload />{" "}
-                        <span>{item.downloadCount}</span> lượt tải xuống
-                    </p>
-                </div>
+  // Format category hiển thị
+  const formatCategoryName = (cat) =>
+    cat
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
 
-                <div className="document__btn">
-                    <button>Chi tiết</button>
-                </div>
-            </div>
+  return (
+    <div
+      className="document__item bg-white rounded-xl shadow-md overflow-hidden transition-transform duration-300 relative cursor-pointer hover:-translate-y-1 hover:shadow-lg"
+      onClick={handleClick}
+    >
+      {/* Badge loại tài liệu (exam/document) */}
+      <div
+        className={`absolute top-[-8px] right-[-8px] px-3 py-1 rounded-full text-xs font-semibold ${
+          item.type === "exam" ? "bg-red-500 text-white" : "bg-green-500 text-white"
+        }`}
+      >
+        {item.type === "exam" ? "Exam" : "Document"}
+      </div>
+
+      <div className="p-6">
+        {/* Icon tài liệu */}
+        <div className="flex items-start mb-4">
+          <div className="flex-shrink-0 bg-blue-100 rounded-lg p-3 text-blue-600">
+            <IoDocumentAttachOutline size={24} />
+          </div>
+
+          <div className="ml-4 flex-grow">
+            <h3 className="text-lg font-semibold text-gray-800 line-clamp-2">{item.title}</h3>
+            <p className="text-sm text-gray-500 mt-1">Uploaded by {item.uploadedBy}</p>
+          </div>
         </div>
-    );
+
+        {/* Danh sách category */}
+        <div className="flex flex-wrap gap-2 mb-4">
+          {item.categories?.map((cat) => (
+            <span
+              key={cat}
+              className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full select-none"
+            >
+              {formatCategoryName(cat)}
+            </span>
+          ))}
+        </div>
+
+        {/* Thông tin lượt tải và ngày tải */}
+        <div className="flex items-center justify-between text-sm text-gray-500">
+          <div className="flex items-center">
+            <FaDownload className="mr-1" />
+            <span>{item.downloadCount} lượt tải xuống</span>
+          </div>
+          <div className="flex items-center">
+            <i className="far fa-calendar-alt mr-1"></i>
+            <span>{new Date(item.uploadedAt).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Nút chi tiết */}
+      <div className="bg-gray-50 px-6 py-4 border-t border-gray-100">
+        <button className="w-full py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+          Chi tiết
+        </button>
+      </div>
+    </div>
+  );
 }
 
 export default DocumentItem;

@@ -37,14 +37,15 @@
 
 
 import React, { useEffect, useState } from "react";
-import { getUserById } from "../Service/DocumentService"; // Điều chỉnh đường dẫn đúng với dự án bạn
+import { getUserById } from "../Service/DocumentService"; // Đảm bảo đúng path
 
-function AuthorInfo({ authorId, token }) {
+function AuthorInfo({ document, token }) {
   const [author, setAuthor] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    const authorId = document?.uploadedBy;
     if (!authorId) {
       setError("Không có ID tác giả");
       setAuthor(null);
@@ -55,7 +56,6 @@ function AuthorInfo({ authorId, token }) {
     setLoading(true);
     setError(null);
 
-    // Nếu getUserById có nhận token, bạn chỉnh sửa lại hàm này hoặc gọi đúng
     getUserById(authorId, token)
       .then((data) => {
         setAuthor(data);
@@ -66,7 +66,7 @@ function AuthorInfo({ authorId, token }) {
         setError(err.message || "Lỗi khi tải thông tin tác giả");
         setLoading(false);
       });
-  }, [authorId, token]);
+  }, [document, token]);
 
   if (loading) return <div>Đang tải thông tin tác giả...</div>;
   if (error) return <div className="text-red-500 font-semibold">{error}</div>;
@@ -104,4 +104,5 @@ function AuthorInfo({ authorId, token }) {
 }
 
 export default AuthorInfo;
+
 

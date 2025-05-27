@@ -37,15 +37,20 @@ export const del = async (path) =>
     return result;
 }
 
-export const patch = async(path, option)=>{
-    const response = fetch(API_DOMAIN +path, {
-        method:"PATCH",
-        headers:{
-            Accept:"application/json",
-            "Content-Type":"application/json",
-        },
-        body: JSON.stringify(option),
-    });
-    const result = await response.json();
-    return result;
-}
+export const patch = async (path, option) => {
+  const response = await fetch(API_DOMAIN + path, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // cần nếu dùng cookie
+    body: JSON.stringify(option),
+  });
+
+  const result = await response.json(); // Lỗi ở đây nếu không await fetch
+  if (!response.ok) {
+    throw new Error(result.message || "Lỗi không xác định");
+  }
+  return result;
+};

@@ -1,4 +1,4 @@
-import { get } from "../../utils/request";
+import { get, post } from "../../utils/request";
 
 export const getDocument = async () => {
   const result = await get("documents");
@@ -20,5 +20,24 @@ export const getUserById = async (id) => {
   return result;
 };
 
+
+export const postComment = async ({ docId, content, toReply = null, idUser }) => {
+  const result = await post(`comments/${docId}/doc/create/${toReply || "null"}/`, {
+    content,
+    toReply,
+    idUser,
+  });
+  return result;
+};
+export const deleteComment = async (commentId) => {
+  const result = await post(`comments/${commentId}/delete`);
+  return result;
+};
+export const editComment = async (commentId, newContent) => {
+  const result = await post(`comments/${commentId}/edit`, {
+    content: newContent,
+  });
+  return result;
+};
 
 

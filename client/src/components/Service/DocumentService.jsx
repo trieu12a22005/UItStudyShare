@@ -1,4 +1,4 @@
-import { get, patch, post } from "../../utils/request";
+import { get,  post } from "../../utils/request";
 
 export const getDocument = async (currentPage) => {
   const result = await get(`documents?page=${currentPage}`);
@@ -11,7 +11,7 @@ export const findDocument = async (search, page) => {
   return result;
 };
 export const getDocumentById = async (id) => {
-  console.log("GỌI API GET DOCUMENT", id); // để kiểm tra thực sự gọi không
+  // console.log("GỌI API GET DOCUMENT", id); // để kiểm tra thực sự gọi không
   const result = await get(`documents/detail/${id}`);
   return result;
 };

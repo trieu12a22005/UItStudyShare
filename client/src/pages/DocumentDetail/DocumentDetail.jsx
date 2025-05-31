@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getDocumentById } from '../../components/Service/DocumentService';
+import { useAuth } from '../../hooks/AuthContext'; // ✅ thêm dòng này
 
 import DocumentContent from '../../components/DocumentContent/DocumentContent';
 import CommentBox from '../../components/CommentBox/CommentBox';
@@ -16,12 +17,13 @@ const DocumentDetail = () => {
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const { user: authUser, token: authToken } = useAuth(); // ✅ lấy từ context
+
   useEffect(() => {
     const fetchDocument = async () => {
       try {
         const data = await getDocumentById(id);
-          setDocument(data.document); // ✅ bóc đúng object cần thiết
-
+        setDocument(data.document); // ✅ lấy object document từ API
       } catch (error) {
         console.error("Lỗi tải chi tiết tài liệu:", error);
       } finally {
@@ -31,6 +33,7 @@ const DocumentDetail = () => {
 
     fetchDocument();
   }, [id]);
+  console.log("authUser:", authUser);
 
   if (loading) {
     return <div className="text-center py-10 text-gray-600">Đang tải tài liệu...</div>;
@@ -42,7 +45,7 @@ const DocumentDetail = () => {
 
   return (
     <div className="w-[70%] mx-auto">
-      <DocumentHeader document={document} />
+      <DocumentHeader document={document} userId={authUser?.idUser} token={authToken} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <DocumentContent document={document} />

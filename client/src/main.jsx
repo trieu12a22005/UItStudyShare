@@ -7,7 +7,6 @@ import { AuthProvider } from "./hooks/AuthContext.jsx";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
     <Provider store={store}>
   <AuthProvider>
     <Router>
@@ -15,5 +14,5 @@ createRoot(document.getElementById("root")).render(
   </Router>
   </AuthProvider>
 </Provider>
-</StrictMode>
+
 );

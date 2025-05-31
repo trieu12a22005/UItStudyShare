@@ -15,6 +15,8 @@
     "@tailwindcss/vite": "^4.0.14",
     "antd": "^5.24.6",
     "antd-style": "^3.7.1",
+    "axios": "^1.9.0",
+    "lucide-react": "^0.511.0",
     "pdf-viewer-reactjs": "^2.2.3",
     "pdfjs-dist": "^5.2.133",
     "react": "^18.3.1",

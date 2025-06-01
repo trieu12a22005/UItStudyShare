@@ -3,7 +3,7 @@ import React from 'react';
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = [];
 
-  const maxPagesToShow = 3;
+  const maxPagesToShow = 2;
   let startPage = currentPage;
   let endPage = currentPage + maxPagesToShow - 1;
 

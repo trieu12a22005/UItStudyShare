@@ -33,7 +33,7 @@ const DocumentDetail = () => {
 
     fetchDocument();
   }, [id]);
-  console.log("authUser:", authUser);
+  // console.log("authUser:", authUser);
 
   if (loading) {
     return <div className="text-center py-10 text-gray-600">Đang tải tài liệu...</div>;
@@ -49,7 +49,7 @@ const DocumentDetail = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <DocumentContent document={document} />
-          <CommentBox />
+          <CommentBox  userId={authUser?.idUser} token={authToken} />
         </div>
         <div className="space-y-6">
           <AuthorInfo document={document} />

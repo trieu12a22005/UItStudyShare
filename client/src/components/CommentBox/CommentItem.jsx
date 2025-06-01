@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
+import { changeComment, deleteComment } from "../Service/DocumentService";
+import { toast } from "react-toastify";
+const CommentItem = ({ comment, userMap, getReplies, onSubmitReply, onRefresh }) => {
 
-const CommentItem = ({ comment, userMap, getReplies, onSubmitReply }) => {
   const username = userMap[comment.idUser] || "Ẩn danh";
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [replyLoading, setReplyLoading] = useState(false);
   const inputRef = useRef();
+// console.log("comment.idUser:", comment.idUser);
+// console.log("isOwn:", comment.isOwn);
 
   useEffect(() => {
     if (isReplying && inputRef.current) {
@@ -14,17 +18,27 @@ const CommentItem = ({ comment, userMap, getReplies, onSubmitReply }) => {
   }, [isReplying]);
 
   const handleSendReply = async () => {
-    if (!replyContent.trim()) return;
-    setReplyLoading(true);
-    try {
+  if (!replyContent.trim()) return;
+  setReplyLoading(true);
+  try {
+    if (replyContent === comment.content) {
+      alert("Nội dung không thay đổi.");
+    } else if (replyContent.startsWith(`@${username} `)) {
+      // Đây là reply
       await onSubmitReply(comment._id, replyContent);
-      setReplyContent("");
-      setIsReplying(false);
-    } catch (err) {
-      alert("Lỗi khi gửi trả lời");
+    } else if (comment.isOwn) {
+      // Đây là sửa comment
+      await changeComment(comment.toId, comment.type, comment._id, replyContent, comment.token);
+      await onRefresh();
     }
-    setReplyLoading(false);
-  };
+    setReplyContent("");
+    setIsReplying(false);
+  } catch (err) {
+    alert("Lỗi khi gửi!");
+  }
+  setReplyLoading(false);
+};
+
 
   const replies = getReplies ? getReplies(comment._id) : [];
 
@@ -41,29 +55,55 @@ const CommentItem = ({ comment, userMap, getReplies, onSubmitReply }) => {
           </span>
           <p className="text-gray-700 mt-1">{comment.content}</p>
 
-          <div className="mt-2 text-sm text-blue-500">
+          <div className="mt-3 flex gap-3 text-sm">
   <button
     onClick={() => {
-  const mention = `@${username} `;
-  setIsReplying(true);
-  setReplyContent(mention);
-
-  // Đặt con trỏ về cuối sau render
-  setTimeout(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.setSelectionRange(mention.length, mention.length);
-    }
-  }, 0);
-}}
-
-    className="hover:underline"
+      const mention = `@${username} `;
+      setIsReplying(true);
+      setReplyContent(mention);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.setSelectionRange(mention.length, mention.length);
+        }
+      }, 0);
+    }}
+    className="text-blue-600 hover:text-blue-800 hover:underline transition"
   >
-    Trả lời
+    💬 Trả lời
   </button>
+
+  {comment.isOwn && (
+    <button
+      onClick={() => {
+        setIsReplying(true);
+        setReplyContent(comment.content);
+      }}
+      className="text-yellow-600 hover:text-yellow-800 hover:underline transition"
+    >
+      ✏️ Sửa
+    </button>
+  )}
+
+  {comment.isOwn && (
+    <button
+      onClick={async () => {
+        if (window.confirm("Bạn có chắc muốn xóa comment này?")) {
+          try {
+            await deleteComment(comment.toId, comment.type, comment._id, comment.token);
+            toast.success("Đã xóa comment!");
+            await onRefresh(); // hoặc gọi hàm cập nhật danh sách comment
+          } catch (err) {
+            toast.error("Lỗi khi xóa comment!");
+          }
+        }
+      }}
+      className="text-red-600 hover:text-red-800 hover:underline transition"
+    >
+      🗑️ Xóa
+    </button>
+  )}
 </div>
-
-
           {isReplying && (
             <div className="mt-3">
               <textarea
@@ -87,19 +127,23 @@ const CommentItem = ({ comment, userMap, getReplies, onSubmitReply }) => {
           )}
         </div>
 
-        {replies.length > 0 && (
-          <div className="mt-4 pl-4 border-l-2 border-gray-200">
-            {replies.map((reply) => (
-              <CommentItem
-                key={reply._id}
-                comment={reply}
-                userMap={userMap}
-                getReplies={getReplies}
-                onSubmitReply={onSubmitReply}
-              />
-            ))}
-          </div>
-        )}
+        {replies.map((reply) => (
+  <CommentItem
+    key={reply._id}
+    comment={{
+      ...reply,
+      isOwn: String(reply.idUser) === String(comment.idUser), // hoặc dùng userId nếu có trong props
+      token: comment.token,
+      toId: comment.toId,
+      type: comment.type,
+    }}
+    userMap={userMap}
+    getReplies={getReplies}
+    onSubmitReply={onSubmitReply}
+    onRefresh={onRefresh}
+  />
+))}
+
       </div>
     </div>
   );

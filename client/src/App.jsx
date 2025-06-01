@@ -7,12 +7,12 @@ import "react-toastify/dist/ReactToastify.css";
 import ResetPassword from "./pages/Login/resetPassword/resetPassword.jsx";
 import Profile from "./pages/Profile/Profile.jsx";
 import Home from "./pages/Home/Home.jsx";
-import EditProfile from "./pages/EditProfile/EditProfile.jsx";
 import ChangePassword from "./pages/ChangePassword/ChangePassword.jsx";
 import Document from "./pages/Document/Document.jsx";
 import Header from "./components/Headers/Header.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import DocumentDetail from "./pages/DocumentDetail/DocumentDetail.jsx";
+import UploadFlow from "./pages/uploadFile/upload.jsx";
 function App() {
   return (
     <>
@@ -26,10 +26,11 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/" element={<Home />} />
         <Route path="/password/change" element={<ChangePassword/>} />
-        <Route path="/profile/edit" element= {<EditProfile />} />
         <Route path="/documents" element={<Document />} />
         <Route path="/documents/detail/:id"  element={<DocumentDetail />} />
+        <Route path="/documents/upload" element={<UploadFlow />} />
       </Routes>
+      <Footer />
     </>
   );
 }

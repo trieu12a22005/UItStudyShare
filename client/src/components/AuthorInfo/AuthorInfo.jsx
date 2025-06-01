@@ -59,6 +59,8 @@ function AuthorInfo({ document, token }) {
     getUserById(authorId, token)
       .then((data) => {
         setAuthor(data);
+        console.log("Thông tin tác giả:", data);
+        console.log("ID tác giả:", authorId);
         setLoading(false);
       })
       .catch((err) => {
@@ -82,8 +84,9 @@ function AuthorInfo({ document, token }) {
         <div>
           <h3 className="font-medium text-gray-800">{author.fullName || "Chưa có tên"}</h3>
           <p className="text-sm text-gray-600">{author.role || "Chưa xác định vai trò"}</p>
+          <p className="text-sm text-gray-600">Trường: {author.university || "Chưa cập nhật"}</p>
+          <p className="text-sm text-gray-600">Ngành: {author.major || "Chưa cập nhật"}</p>
           <p className="text-sm text-gray-600">Email: {author.email || "Chưa có email"}</p>
-          <p className="text-sm text-gray-600">Số điện thoại: {author.phone || "Chưa có số điện thoại"}</p>
           <p className="text-sm text-gray-600">
             Ngày sinh:{" "}
             {author.birthday
@@ -92,7 +95,7 @@ function AuthorInfo({ document, token }) {
                   month: "2-digit",
                   year: "numeric",
                 })
-              : "N/A"}
+              : "Chưa cập nhật"}
           </p>
         </div>
       </div>

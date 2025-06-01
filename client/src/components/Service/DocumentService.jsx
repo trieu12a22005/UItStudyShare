@@ -1,13 +1,13 @@
-import { get,  post } from "../../utils/request";
+import { del, get,  patch,  post } from "../../utils/request";
 
 export const getDocument = async (currentPage) => {
   const result = await get(`documents?page=${currentPage}`);
   return result;
 };
 export const findDocument = async (search, page) => {
-  console.log(search)
+  // console.log(search)
   const result = await get(`documents/find?query=${search}&page=${page}`);
-  console.log(search);
+  // console.log(search);
   return result;
 };
 export const getDocumentById = async (id) => {
@@ -27,10 +27,13 @@ export const increaseDownloadCount = async (id) => {
   return await get(`documents/download/${id}`);
 };
 
-export const getRelatedDocuments = async (category_id) => {
-  const result = await get(`documents/byCategory/${category_id}`);
+export const getRelatedDocuments = async (categoryIds) => {
+  const result = await post(`documents/byCategory`, {
+    category: Array.isArray(categoryIds) ? categoryIds : [categoryIds],
+  });
   return result;
 };
+
 export const rateDocument = async (docId, score, token) => {
   return await post(
     `documents/rate/${docId}`,
@@ -51,6 +54,38 @@ export const postComment = async ({ docId, content, toReply = null, idUser }) =>
   return result;
 };
 export const getNameCategoryById = async (id) => {
-  const result = await get(`category/${id}`);
+  const result = await get(`categories/${id}`);
   return result;
 }
+
+export const postReportDocument = async (docId, reason, description, token) => {
+  return await post(
+    `reports/create/${docId}`,
+    { reason, description }, 
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+
+
+export const changeComment = async (toId, type, commentId, content, token) => {
+  return await patch(
+    `comments/${toId ?? "null"}/${type}/update/${commentId}/`,
+    { content },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+};
+
+export const deleteComment = async (toId, type, commentId, token) => {
+  return await del(
+    `comments/${toId ?? "null"}/${type}/delete/${commentId}/`,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+};

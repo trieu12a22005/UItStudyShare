@@ -4,40 +4,58 @@ import { getRelatedDocuments } from "../Service/DocumentService";
 import { useNavigate } from "react-router-dom";
 
 const RelatedDocument = ({ document }) => {
-  const category_id = document?.category?.[0]?.categoryId;
+  const categoryIds = document?.category?.map((c) => c.categoryId).filter(Boolean) || [];
   const [relatedDocs, setRelatedDocs] = useState([]);
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!category_id) {
-      console.warn("⚠️ Không có category_id được truyền vào.");
-      return;
-    }
+ useEffect(() => {
+  if (!Array.isArray(categoryIds) || categoryIds.length === 0) {
+    console.warn("⚠️ Không có categoryIds hợp lệ.");
+    return;
+  }
 
-    const fetchDocs = async () => {
-      try {
-        console.log("🔍 Gọi API getRelatedDocuments với category_id:", category_id);
-        const res = await getRelatedDocuments(category_id);
+  const fetchDocs = async () => {
+    try {
+      console.log("🔍 Gọi API getRelatedDocuments cho từng category:", categoryIds);
 
-        const docs = res?.documents || res?.data?.documents;
-        console.log("📄 Danh sách documents:", docs);
+      // Gọi song song các API
+      const allResults = await Promise.all(
+        categoryIds.map((id) => getRelatedDocuments([id]))
+      );
 
-        if (Array.isArray(docs)) {
-          const filtered = docs.filter((d) => d._id !== document._id);
-          setRelatedDocs(filtered);
-        } else {
-          console.warn("⚠️ Không có documents hoặc documents không phải là mảng:", docs);
-          setRelatedDocs([]);
+      // Gộp tất cả documents từ các phản hồi
+      const docsFlat = allResults
+        .map((res) => res?.documents || res?.data?.documents || [])
+        .flat();
+
+      // Tạo map để loại trùng + tính điểm
+      const docMap = new Map();
+
+      docsFlat.forEach((doc) => {
+        if (!docMap.has(doc._id)) {
+          docMap.set(doc._id, { ...doc, _priorityScore: 0 });
         }
-      } catch (err) {
-        console.error("❌ Lỗi khi tải tài liệu liên quan:", err);
-        setRelatedDocs([]);
-      }
-    };
+        const current = docMap.get(doc._id);
+        current._priorityScore += 1;
+      });
 
-    fetchDocs();
-  }, [category_id, document._id]);
+      // Chuyển về mảng và lọc tài liệu hiện tại
+      const scored = Array.from(docMap.values())
+        .filter((d) => d._id !== document._id)
+        .sort((a, b) => b._priorityScore - a._priorityScore);
+
+      console.log("📄 Danh sách tài liệu đã tính điểm ưu tiên:", scored);
+      setRelatedDocs(scored);
+    } catch (err) {
+      console.error("❌ Lỗi khi tải tài liệu liên quan:", err);
+      setRelatedDocs([]);
+    }
+  };
+
+  fetchDocs();
+}, [document._id]);
+
 
   const visibleDocs = showAll ? relatedDocs : relatedDocs.slice(0, 3);
 

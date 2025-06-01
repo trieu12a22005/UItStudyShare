@@ -8,6 +8,7 @@ import {
 import CommentItem from "./CommentItem"; // ✅ sử dụng file bạn đã tách
 
 function CommentBox({ token, userId }) {
+  // console.log("userId in CommentBox:", userId);
   const { id: docId } = useParams();
   const [comments, setComments] = useState([]);
   const [userMap, setUserMap] = useState({});
@@ -17,6 +18,7 @@ function CommentBox({ token, userId }) {
   const fetchCommentsAndUsers = async () => {
     try {
       const data = await getCommentByDocumentId(docId);
+      // console.log("Fetched comments:", data);
       setComments(data);
 
       const userIds = [...new Set(data.map((c) => c.idUser))];
@@ -107,19 +109,28 @@ function CommentBox({ token, userId }) {
           </div>
         </div>
       </div>
-
       {/* Danh sách bình luận gốc */}
       <div className="space-y-4">
         {rootComments.length > 0 ? (
           rootComments.map((comment) => (
-            <CommentItem
-              key={comment._id}
-              comment={comment}
-              userMap={userMap}
-              getReplies={getReplies}
-              onSubmitReply={handleReplySubmit}
-            />
-          ))
+  <CommentItem
+  key={comment._id}
+  comment={{
+    ...comment,
+    isOwn: String(comment.idUser) === String(userId), // ✅ Gán tại đây!
+    token,
+    toId: docId,
+    type: "doc"
+  }}
+  userMap={userMap}
+  getReplies={getReplies}
+  onSubmitReply={handleReplySubmit}
+  onRefresh={fetchCommentsAndUsers}
+/>
+
+))
+
+
         ) : (
           <p className="text-gray-500">Chưa có bình luận nào.</p>
         )}

@@ -5,6 +5,7 @@ import {
   increaseDownloadCount,
   rateDocument,
   getNameCategoryById,
+  postReportDocument,
 } from '../Service/DocumentService';
 
 function DocumentHeader({ document, token, userId }) {
@@ -14,7 +15,7 @@ function DocumentHeader({ document, token, userId }) {
   const [submitted, setSubmitted] = useState(false);
   const [userScore, setUserScore] = useState(null);
   const [categoryNames, setCategoryNames] = useState({});
-
+  const [showReportModal, setShowReportModal] = useState(false);
   useEffect(() => {
     const uploaderId = document?.uploadedBy;
     if (uploaderId) {
@@ -41,28 +42,28 @@ function DocumentHeader({ document, token, userId }) {
   }, [document, userId]);
 
   useEffect(() => {
-  const fetchCategoryNames = async () => {
-    if (!document?.category) return;
+    const fetchCategoryNames = async () => {
+      if (!document?.category) return;
 
-    const namesMap = {};
+      const namesMap = {};
 
-    await Promise.all(
-      document.category.map(async (cat) => {
-        try {
-          const res = await getNameCategoryById(cat.categoryId);
-          namesMap[cat.categoryId] = res.category?.name || "Không rõ";
-        } catch (err) {
-          console.error(`Không lấy được tên cho categoryId ${cat.categoryId}`, err);
-          namesMap[cat.categoryId] = "Không rõ";
-        }
-      })
-    );
+      await Promise.all(
+        document.category.map(async (cat) => {
+          try {
+            const res = await getNameCategoryById(cat.categoryId);
+            namesMap[cat.categoryId] = res.category?.name || "Không rõ";
+          } catch (err) {
+            console.error(`Không lấy được tên cho categoryId ${cat.categoryId}`, err);
+            namesMap[cat.categoryId] = "Không rõ";
+          }
+        })
+      );
 
-    setCategoryNames(namesMap);
-  };
+      setCategoryNames(namesMap);
+    };
 
-  fetchCategoryNames();
-}, [document]);
+    fetchCategoryNames();
+  }, [document]);
 
 
   if (!document) return null;
@@ -107,10 +108,22 @@ function DocumentHeader({ document, token, userId }) {
       .catch(() => toast.error("Không thể sao chép liên kết!"));
   };
 
-  const handleReport = () => {
-    toast.warning("Bạn đã báo cáo tài liệu này.");
-    console.log("🚩 Báo cáo tài liệu:", document._id);
-  };
+ const handleReportSubmit = async (e) => {
+  e.preventDefault();
+  const reason = e.target.reason.value;
+  const details = e.target.details.value;
+  const confidential = e.target.confidential?.checked ?? false;
+
+  try {
+    await postReportDocument(document._id, reason, details, token);
+    toast.success("Cảm ơn bạn đã báo cáo. Chúng tôi sẽ xem xét trong thời gian sớm nhất.");
+    setShowReportModal(false);
+  } catch (err) {
+    console.error("Lỗi khi gửi báo cáo:", err);
+    toast.error("Không thể gửi báo cáo. Vui lòng thử lại sau.");
+  }
+};
+
 
   const submitRating = async () => {
     if (submitted) {
@@ -228,11 +241,12 @@ function DocumentHeader({ document, token, userId }) {
             </button>
 
             <button
-              onClick={handleReport}
+              onClick={() => setShowReportModal(true)}
               className="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg font-medium border border-gray-300 flex items-center"
             >
               <i className="fas fa-flag mr-2 text-orange-500" /> Báo cáo
             </button>
+
           </div>
 
           {showRating && !submitted && (
@@ -255,6 +269,49 @@ function DocumentHeader({ document, token, userId }) {
             </div>
           )}
         </div>
+        {showReportModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+              <div className="border-b p-4 flex justify-between items-center">
+                <h3 className="text-lg font-bold">
+                  <i className="fas fa-flag text-red-500 mr-2"></i>
+                  Báo cáo tài liệu
+                </h3>
+                <button onClick={() => setShowReportModal(false)} className="text-gray-500 hover:text-gray-700">
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              <form onSubmit={handleReportSubmit} className="p-6">
+                <p className="text-gray-600 mb-4">Hãy cung cấp thông tin chi tiết về vấn đề bạn gặp phải.</p>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Lý do báo cáo</label>
+                  <select name="reason" className="w-full border rounded-lg p-2 focus:ring-indigo-500" required>
+                    <option value="">Chọn lý do</option>
+                    <option value="copyright">Vi phạm bản quyền</option>
+                    <option value="inappropriate">Nội dung không phù hợp</option>
+                    <option value="incorrect">Thông tin sai</option>
+                    <option value="spam">Spam hoặc gây hiểu lầm</option>
+                    <option value="other">Lý do khác</option>
+                  </select>
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-medium mb-2">Mô tả chi tiết</label>
+                  <textarea name="details" className="w-full border rounded-lg p-3 focus:ring-indigo-500" rows="4" placeholder="Chi tiết vấn đề..." required />
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button type="button" onClick={() => setShowReportModal(false)} className="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-50">
+                    Huỷ
+                  </button>
+                  <button type="submit" className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center">
+                    <i className="fas fa-paper-plane mr-2"></i> Gửi báo cáo
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

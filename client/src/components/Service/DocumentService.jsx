@@ -57,10 +57,10 @@ export const getNameCategoryById = async (id) => {
   const result = await get(`categories/${id}`);
   return result;
 }
-
+// http://localhost:3055/api/v1/reports/create/67eb8a9e49c90619327b9cfe/doc
 export const postReportDocument = async (docId, reason, description, token) => {
   return await post(
-    `reports/create/${docId}`,
+    `reports/create/${docId}/doc`,
     { reason, description }, 
     {
       headers: {

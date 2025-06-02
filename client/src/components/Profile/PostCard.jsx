@@ -1,7 +1,23 @@
 import moment from "moment";
+import { useEffect, useState } from "react";
+import { getUserById } from "../Service/DocumentService";
 
 function PostCard({ post }) {
   const tags = Array.isArray(post.tags) ? post.tags : [];
+  const [uploaderName, setUploaderName] = useState("Ẩn danh");
+useEffect(() => {
+  if (post.author) {
+    getUserById(post.author)
+      .then((user) => {
+        setUploaderName(user.fullName || "Ẩn danh");
+      })
+      .catch(() => {
+        setUploaderName("Ẩn danh");
+      });
+  } else {
+    setUploaderName("Không rõ");
+  }
+}, [post.author]);
 
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden post-card transition duration-300">
@@ -15,7 +31,7 @@ function PostCard({ post }) {
           <div className="ml-4 flex-1">
             <div className="flex items-center justify-between">
               <div>
-                <span className="font-medium">{post.authorName || "Ẩn danh"}</span>
+               <span className="font-medium">{uploaderName}</span>
                 <span className="text-gray-500 text-sm ml-2">
                   {post.createdAt
                     ? new Date(post.createdAt).toLocaleString()

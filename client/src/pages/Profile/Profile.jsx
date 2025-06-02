@@ -171,7 +171,7 @@ function Profile({ user, onSave }) {
 
     {/* RIGHT: Content */}
     <div className="w-full lg:w-2/3">
-      <DocumentFilters />
+      {/* <DocumentFilters /> */}
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
         <ProfileDocList />
       </div>

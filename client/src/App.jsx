@@ -13,6 +13,7 @@ import Header from "./components/Headers/Header.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import DocumentDetail from "./pages/DocumentDetail/DocumentDetail.jsx";
 import UploadFlow from "./pages/uploadFile/upload.jsx";
+import Posts from "./pages/Posts/Posts.jsx";
 function App() {
   return (
     <>
@@ -29,6 +30,7 @@ function App() {
         <Route path="/documents" element={<Document />} />
         <Route path="/documents/detail/:id"  element={<DocumentDetail />} />
         <Route path="/documents/upload" element={<UploadFlow />} />
+        <Route path="/community" element={<Posts />} />
       </Routes>
       <Footer />
     </>

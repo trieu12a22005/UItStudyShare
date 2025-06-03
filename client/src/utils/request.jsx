@@ -38,6 +38,15 @@ export const post = async (path, options) =>{
     const result = await response.json();
     return result;
 }
+export const postform = async (path, formData) => {
+  const response = await fetch(API_DOMAIN + path, {
+    method: "POST",
+    body: formData, // body là FormData
+    credentials: "include",
+  });
+  const result = await response.json();
+  return result;
+};
 
 
 export const del = async (path, options = {}) => {

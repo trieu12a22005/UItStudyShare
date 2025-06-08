@@ -1,37 +1,30 @@
-import { del, get,  patch,  post } from "../../utils/request";
+import { del, get, patch, post } from "../../utils/request";
 
+// ===== 📄 DOCUMENT API =====
 export const getDocument = async (currentPage) => {
-  const result = await get(`documents?page=${currentPage}`);
-  return result;
+  return await get(`documents?page=${currentPage}`);
 };
+
 export const findDocument = async (search, page) => {
-  // console.log(search)
-  const result = await get(`documents/find?query=${search}&page=${page}`);
-  // console.log(search);
-  return result;
+  return await get(`documents/find?query=${search}&page=${page}`);
 };
+
 export const getDocumentById = async (id) => {
-  // console.log("GỌI API GET DOCUMENT", id); // để kiểm tra thực sự gọi không
-  const result = await get(`documents/detail/${id}`);
-  return result;
+  return await get(`documents/detail/${id}`);
 };
-export const getCommentByDocumentId = async (id) => {
-  const result = await get(`comments/${id}`);
-  return result;
-};
-export const getUserById = async (id) => {
-  const result = await get(`users/getUser/${id}`);
-  return result;
-};
-export const increaseDownloadCount = async (id) => {
-  return await get(`documents/download/${id}`);
+
+export const getNameCategoryById = async (id) => {
+  return await get(`categories/${id}`);
 };
 
 export const getRelatedDocuments = async (categoryIds) => {
-  const result = await post(`documents/byCategory`, {
+  return await post(`documents/byCategory`, {
     category: Array.isArray(categoryIds) ? categoryIds : [categoryIds],
   });
-  return result;
+};
+
+export const increaseDownloadCount = async (id) => {
+  return await get(`documents/download/${id}`);
 };
 
 export const rateDocument = async (docId, score, token) => {
@@ -45,23 +38,11 @@ export const rateDocument = async (docId, score, token) => {
     }
   );
 };
-export const postComment = async ({ docId, content, toReply = null, idUser }) => {
-  const result = await post(`comments/${docId}/doc/create/${toReply || "null"}/`, {
-    content,
-    toReply,
-    idUser,
-  });
-  return result;
-};
-export const getNameCategoryById = async (id) => {
-  const result = await get(`categories/${id}`);
-  return result;
-}
-// http://localhost:3055/api/v1/reports/create/67eb8a9e49c90619327b9cfe/doc
+
 export const postReportDocument = async (docId, reason, description, token) => {
   return await post(
     `reports/create/${docId}/doc`,
-    { reason, description }, 
+    { reason, description },
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -70,22 +51,46 @@ export const postReportDocument = async (docId, reason, description, token) => {
   );
 };
 
+// ===== 👤 USER API =====
+export const getUserById = async (id) => {
+  return await get(`users/getUser/${id}`);
+};
 
+// ===== 💬 COMMENT API (dùng chung cho doc & post) =====
+
+// Lấy comment theo ID (dùng cho cả doc & post)
+export const getCommentByType = async (toId) => {
+  return await get(`comments/${toId}`);
+};
+
+// Tạo bình luận (cho doc hoặc post)
+export const postComment = async ({ docId, postId, content, toReply = null, idUser }) => {
+  const toId = docId || postId;
+  const type = docId ? "doc" : "post";
+  return await post(`comments/${toId}/${type}/create/${toReply || "null"}/`, {
+    content,
+    toReply,
+    idUser,
+  });
+};
+
+// Cập nhật bình luận
 export const changeComment = async (toId, type, commentId, content, token) => {
   return await patch(
     `comments/${toId ?? "null"}/${type}/update/${commentId}/`,
     { content },
     {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     }
   );
 };
 
+// Xóa bình luận
 export const deleteComment = async (toId, type, commentId, token) => {
   return await del(
     `comments/${toId ?? "null"}/${type}/delete/${commentId}/`,
     {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     }
   );
 };

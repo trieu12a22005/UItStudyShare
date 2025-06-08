@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {
-  getCommentByDocumentId,
+  getCommentByType,
   getUserById,
   postComment,
 } from "../Service/DocumentService";
-import CommentItem from "./CommentItem"; // ✅ sử dụng file bạn đã tách
+import CommentItem from "./CommentItem";
 
-function CommentBox({ token, userId }) {
-  // console.log("userId in CommentBox:", userId);
-  const { id: docId } = useParams();
+function CommentBox({ token, userId, id: propId, type = "doc" }) {
+  const { id: routeId } = useParams();
+  const id = propId || routeId;
+
   const [comments, setComments] = useState([]);
   const [userMap, setUserMap] = useState({});
   const [newComment, setNewComment] = useState("");
@@ -17,8 +18,7 @@ function CommentBox({ token, userId }) {
 
   const fetchCommentsAndUsers = async () => {
     try {
-      const data = await getCommentByDocumentId(docId);
-      // console.log("Fetched comments:", data);
+      const data = await getCommentByType(id);
       setComments(data);
 
       const userIds = [...new Set(data.map((c) => c.idUser))];
@@ -40,8 +40,8 @@ function CommentBox({ token, userId }) {
   };
 
   useEffect(() => {
-    if (docId) fetchCommentsAndUsers();
-  }, [docId]);
+    if (id) fetchCommentsAndUsers();
+  }, [id, type]);
 
   const getReplies = (parentId) =>
     comments.filter((c) => c.toReply === parentId);
@@ -51,14 +51,14 @@ function CommentBox({ token, userId }) {
     setLoading(true);
     try {
       await postComment({
-        docId,
+        [type === "doc" ? "docId" : "postId"]: id,
         content: newComment,
         toReply: null,
         idUser: userId,
       });
       setNewComment("");
       await fetchCommentsAndUsers();
-    } catch (err) {
+    } catch {
       alert("Lỗi khi gửi bình luận");
     }
     setLoading(false);
@@ -66,7 +66,7 @@ function CommentBox({ token, userId }) {
 
   const handleReplySubmit = async (parentId, replyContent) => {
     await postComment({
-      docId,
+      [type === "doc" ? "docId" : "postId"]: id,
       content: replyContent,
       toReply: parentId,
       idUser: userId,
@@ -82,7 +82,6 @@ function CommentBox({ token, userId }) {
         Bình luận ({comments.length})
       </h2>
 
-      {/* Viết bình luận mới */}
       <div className="bg-gray-50 rounded-lg p-4 mb-6 border">
         <div className="flex items-start">
           <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3">
@@ -109,28 +108,25 @@ function CommentBox({ token, userId }) {
           </div>
         </div>
       </div>
-      {/* Danh sách bình luận gốc */}
+
       <div className="space-y-4">
         {rootComments.length > 0 ? (
           rootComments.map((comment) => (
-  <CommentItem
-  key={comment._id}
-  comment={{
-    ...comment,
-    isOwn: String(comment.idUser) === String(userId), // ✅ Gán tại đây!
-    token,
-    toId: docId,
-    type: "doc"
-  }}
-  userMap={userMap}
-  getReplies={getReplies}
-  onSubmitReply={handleReplySubmit}
-  onRefresh={fetchCommentsAndUsers}
-/>
-
-))
-
-
+            <CommentItem
+              key={comment._id}
+              comment={{
+                ...comment,
+                isOwn: String(comment.idUser) === String(userId),
+                token,
+                toId: id,
+                type,
+              }}
+              userMap={userMap}
+              getReplies={getReplies}
+              onSubmitReply={handleReplySubmit}
+              onRefresh={fetchCommentsAndUsers}
+            />
+          ))
         ) : (
           <p className="text-gray-500">Chưa có bình luận nào.</p>
         )}

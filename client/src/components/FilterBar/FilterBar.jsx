@@ -4,7 +4,7 @@ const FilterBar = ({ searchTerm, onSearchChange, onFilterChange, categories, sel
     const inputRef = useRef();
 
     useEffect(() => {
-        inputRef.current.focus(); // Tự động focus khi render
+        inputRef.current.focus();
     }, []);
 
     return (
@@ -14,10 +14,9 @@ const FilterBar = ({ searchTerm, onSearchChange, onFilterChange, categories, sel
                     type="text"
                     ref={inputRef}
                     placeholder="🔍 Search documents..."
-                    value={searchTerm} // <-- Thêm dòng này
+                    value={searchTerm}
                     className="flex-1 border border-gray-300 rounded px-4 py-2"
                     onChange={(e) => onSearchChange(e.target.value)}
-
                 />
                 <select
                     className="border border-gray-300 rounded px-4 py-2"
@@ -32,18 +31,19 @@ const FilterBar = ({ searchTerm, onSearchChange, onFilterChange, categories, sel
             <div className="flex flex-wrap gap-2 mt-4">
                 {categories.map((category) => (
                     <button
-                        key={category}
+                        key={category.id}
                         onClick={() => onCategoryChange(category)}
-                        className={`px-4 py-1 border rounded-full ${selectedCategory === category ? 'border-blue-500 text-blue-500' : 'border-gray-300 text-gray-700'
+                        className={`px-4 py-1 border rounded-full ${selectedCategory?.id === category.id
+                                ? 'border-blue-500 text-blue-500'
+                                : 'border-gray-300 text-gray-700'
                             }`}
                     >
-                        {category}
+                        {category.name}
                     </button>
                 ))}
             </div>
         </div>
     );
 };
-
 
 export default FilterBar;

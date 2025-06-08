@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { findDocument, getDocument } from "../../components/Service/DocumentService";
-import { useAuth } from "../../hooks/AuthContext";
-import { Link } from "react-router-dom";
 import "./Document.scss";
 import Footer from "../../components/Footer/Footer";
 import AIAssistantModal from "../../components/AI/Assistance";
@@ -9,32 +7,51 @@ import { MessageSquare } from "lucide-react";
 import Pagination from "../../components/Pagination/Pagination";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import DocumentList from "../../components/DocumentList/DocumentList";
+
 function Document() {
-  const { isLogin } = useAuth();
   const [document, setDocument] = useState({ documents: [], total: 1 });
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState({ id: '', name: 'All Categories' });
   const [open, setOpen] = useState(false);
   const [chatData, setChatdata] = useState(null);
-  const categories = ['All Categories', 'Math', 'Science', 'AI', 'History'];
+  const [categories, setCategories] = useState([{ id: '', name: 'All Categories' }]);
 
   useEffect(() => {
-    if (!isLogin) {
-      setDocument({ documents: [], total: 1 });
-      return;
-    }
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:3055/api/v1/categories', {
+          method: 'GET',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        if (!response.ok) throw new Error('Lỗi lấy danh mục');
+        const data = await response.json();
+        setCategories([{ id: '', name: 'All Categories' }, ...data.map(d => ({ id: d._id, name: d.name }))]);
+      } catch (err) {
+        console.error('Lỗi khi tải danh mục:', err);
+      }
+    };
+    fetchCategories();
+  }, []);
 
-    const fetchApi = async () => {
+  useEffect(() => {
+    const fetchDocuments = async () => {
       setLoading(true);
       try {
         let result;
-        if (searchTerm === "") {
-          result = await getDocument(currentPage);
-        } else {
+        if (selectedCategory && selectedCategory.id) {
+          const response = await fetch(`http://localhost:3055/api/v1/documents/byCategory/${selectedCategory.id}`, {
+            method: 'GET',
+            credentials: 'include'
+          });
+          result = await response.json();
+        } else if (searchTerm !== "") {
           result = await findDocument(searchTerm, currentPage);
+        } else {
+          result = await getDocument(currentPage);
         }
         setDocument(result);
       } catch (err) {
@@ -43,36 +60,25 @@ function Document() {
         setLoading(false);
       }
     };
-
-    fetchApi();
-  }, [isLogin, currentPage, searchTerm]);
+    fetchDocuments();
+  }, [currentPage, searchTerm, selectedCategory]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, selectedCategory]);
 
-  const totalPages = document.pages
-  console.log(document.pages)
-  if (!isLogin) {
-    return (
-      <div className="text-center py-20 text-xl text-red-600 font-semibold">
-        Bạn chưa đăng nhập!! <Link to="/login" className="text-blue-500 underline hover:text-blue-700">Đăng nhập ngay</Link>
-      </div>
-    );
-  }
+  const totalPages = document.pages || 1;
 
   return (
     <>
-      {/* Không render lại FilterBar và Pagination khi document thay đổi */}
       <FilterBar
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         onFilterChange={setFilterType}
         categories={categories}
         selectedCategory={selectedCategory}
-        onCategoryChange={(cat) => setSelectedCategory(cat === 'All Categories' ? '' : cat)}
+        onCategoryChange={setSelectedCategory}
       />
-
       <div className="flex flex-col min-h-screen">
         <div className="document__list flex-grow">
           {loading ? (
@@ -81,7 +87,6 @@ function Document() {
             <DocumentList documents={document.documents} />
           )}
         </div>
-
         <div className="pagination-container flex justify-center py-4">
           <Pagination
             currentPage={currentPage}
@@ -90,7 +95,6 @@ function Document() {
           />
         </div>
       </div>
-
       <button
         className="fixed bottom-30 right-6 bg-green-600 text-white p-4 rounded-full shadow-lg hover:bg-green-700 transition duration-300 flex items-center space-x-2"
         onClick={() => setOpen(!open)}
@@ -99,6 +103,7 @@ function Document() {
         <span className="text-sm">Chat cùng AI</span>
       </button>
       <AIAssistantModal chatData={chatData} open={open} setOpen={setOpen} />
+      <Footer />
     </>
   );
 }

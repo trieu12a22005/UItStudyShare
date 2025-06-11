@@ -51,7 +51,7 @@ function Footer ()
             <i className="fab fa-instagram" />
           </a>
         </div>
-        <p className="text-gray-400 text-sm">Email: 23521784@gm.uit.edu.vn</p>
+        <p className="text-gray-400 text-sm">Email: UITShare@gm.uit.edu.vn</p>
       </div>
     </div>
     <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">

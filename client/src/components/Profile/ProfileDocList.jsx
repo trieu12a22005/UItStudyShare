@@ -19,7 +19,7 @@ function ProfileDocList() {
   const POSTS_PER_PAGE = 2;
 
   useEffect(() => {
-    if (!isLogin) {
+    if (!isLogin || !user) {
       setDocument({ documents: [], total: 1 });
       return;
     }
@@ -27,12 +27,9 @@ function ProfileDocList() {
     const fetchApi = async () => {
       setLoading(true);
       try {
-        let result;
-        if (searchTerm === "") {
-          result = await getDocument(currentPage);
-        } else {
-          result = await findDocument(searchTerm, currentPage);
-        }
+        const result = searchTerm === ""
+          ? await getDocument(currentPage)
+          : await findDocument(searchTerm, currentPage);
 
         const filteredDocs = result.documents.filter(doc => doc.uploadedBy === user.idUser);
         setDocument({ documents: filteredDocs, pages: result.pages });
@@ -46,11 +43,12 @@ function ProfileDocList() {
     if (activeTab === "docs") {
       fetchApi();
     }
-  }, [isLogin, currentPage, searchTerm, activeTab, user.idUser]);
+  }, [isLogin, currentPage, searchTerm, activeTab, user]);
 
   useEffect(() => {
+    if (activeTab !== "posts" || !isLogin || !user) return;
+
     const fetchPosts = async () => {
-      if (activeTab !== "posts" || !isLogin) return;
       setLoading(true);
       try {
         const res = await getPosts();
@@ -64,7 +62,7 @@ function ProfileDocList() {
     };
 
     fetchPosts();
-  }, [activeTab, isLogin, user.idUser]);
+  }, [activeTab, isLogin, user]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -75,8 +73,7 @@ function ProfileDocList() {
   }, [activeTab]);
 
   const totalPages = document.pages || 1;
-const totalPostPages = posts.length > 0 ? Math.ceil(posts.length / POSTS_PER_PAGE) : 1;
-
+  const totalPostPages = posts.length > 0 ? Math.ceil(posts.length / POSTS_PER_PAGE) : 1;
 
   if (!isLogin) {
     return (
@@ -94,28 +91,20 @@ const totalPostPages = posts.length > 0 ? Math.ceil(posts.length / POSTS_PER_PAG
       <div className="mb-4">
         <div className="bg-white rounded-lg shadow border-b border-gray-200">
           <nav className="flex -mb-px">
-            <button
-              className={`py-3 px-6 text-sm font-medium border-b-2 transition ${
-                activeTab === "docs"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-300"
-              }`}
-              onClick={() => setActiveTab("docs")}
-            >
-              <i className="fas fa-file-alt mr-2" />
-              My Documents
-            </button>
-            <button
-              className={`py-3 px-6 text-sm font-medium border-b-2 transition ${
-                activeTab === "posts"
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-300"
-              }`}
-              onClick={() => setActiveTab("posts")}
-            >
-              <i className="fas fa-comments mr-2" />
-              Posts
-            </button>
+            {["docs", "posts"].map((tab) => (
+              <button
+                key={tab}
+                className={`py-3 px-6 text-sm font-medium border-b-2 transition ${
+                  activeTab === tab
+                    ? "border-blue-600 text-blue-600"
+                    : "border-transparent text-gray-500 hover:text-blue-600 hover:border-blue-300"
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                <i className={`fas ${tab === "docs" ? "fa-file-alt" : "fa-comments"} mr-2`} />
+                {tab === "docs" ? "My Documents" : "Posts"}
+              </button>
+            ))}
           </nav>
         </div>
       </div>
@@ -135,7 +124,6 @@ const totalPostPages = posts.length > 0 ? Math.ceil(posts.length / POSTS_PER_PAG
                 ))}
               </div>
             )}
-
             <div className="pagination-container flex justify-center py-4">
               <Pagination
                 currentPage={currentPage}
@@ -146,38 +134,36 @@ const totalPostPages = posts.length > 0 ? Math.ceil(posts.length / POSTS_PER_PAG
           </>
         )}
 
-       {activeTab === "posts" && (
-  <>
-    {loading ? (
-      <div className="text-center py-20 text-lg text-gray-600">Đang tải bài viết...</div>
-    ) : posts.length === 0 ? (
-      <div className="text-center py-20 text-gray-500 italic">
-        Bạn chưa có bài viết nào.
+        {activeTab === "posts" && (
+          <>
+            {loading ? (
+              <div className="text-center py-20 text-lg text-gray-600">Đang tải bài viết...</div>
+            ) : posts.length === 0 ? (
+              <div className="text-center py-20 text-gray-500 italic">
+                Bạn chưa có bài viết nào.
+              </div>
+            ) : (
+              <>
+                <div className="space-y-6">
+                  {posts
+                    .slice((currentPostPage - 1) * POSTS_PER_PAGE, currentPostPage * POSTS_PER_PAGE)
+                    .map((post) => (
+                      <PostCard key={post._id} post={post} />
+                    ))}
+                </div>
+                <div className="pagination-container flex justify-center py-4">
+                  <Pagination
+                    currentPage={currentPostPage}
+                    totalPages={totalPostPages}
+                    onPageChange={setCurrentPostPage}
+                  />
+                </div>
+              </>
+            )}
+          </>
+        )}
       </div>
-    ) : (
-      <>
-        <div className="space-y-6">
-          {posts
-            .slice((currentPostPage - 1) * POSTS_PER_PAGE, currentPostPage * POSTS_PER_PAGE)
-            .map((post) => (
-              <PostCard key={post._id} post={post} />
-            ))}
-        </div>
-
-        {/* Đây là pagination đúng của bài viết */}
-        <div className="pagination-container flex justify-center py-4">
-          <Pagination
-            currentPage={currentPostPage}
-            totalPages={totalPostPages}
-            onPageChange={setCurrentPostPage}
-          />
-        </div>
-      </>
-    )}
-  </>
-)}
-      </div>
-    </> 
+    </>
   );
 }
 

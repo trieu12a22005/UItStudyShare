@@ -7,7 +7,8 @@ import {
 } from "../Service/DocumentService";
 import CommentItem from "./CommentItem";
 
-function CommentBox({ token, userId, id: propId, type = "doc" }) {
+function CommentBox({ token, userId, id: propId, type = "doc", onCommentPosted }) {
+
   const { id: routeId } = useParams();
   const id = propId || routeId;
 
@@ -26,7 +27,7 @@ function CommentBox({ token, userId, id: propId, type = "doc" }) {
         userIds.map(async (uid) => {
           try {
             const user = await getUserById(uid);
-            return [uid, user.fullName];
+            return [uid, user.fullName, user.avatar];
           } catch {
             return [uid, "Ẩn danh"];
           }
@@ -46,33 +47,41 @@ function CommentBox({ token, userId, id: propId, type = "doc" }) {
   const getReplies = (parentId) =>
     comments.filter((c) => c.toReply === parentId);
 
-  const handleSubmit = async () => {
-    if (!newComment.trim()) return;
-    setLoading(true);
-    try {
-      await postComment({
-        [type === "doc" ? "docId" : "postId"]: id,
-        content: newComment,
-        toReply: null,
-        idUser: userId,
-      });
-      setNewComment("");
-      await fetchCommentsAndUsers();
-    } catch {
-      alert("Lỗi khi gửi bình luận");
-    }
-    setLoading(false);
-  };
-
-  const handleReplySubmit = async (parentId, replyContent) => {
+const handleSubmit = async () => {
+  if (!newComment.trim()) return;
+  setLoading(true);
+  try {
     await postComment({
       [type === "doc" ? "docId" : "postId"]: id,
-      content: replyContent,
-      toReply: parentId,
+      content: newComment,
+      toReply: null,
       idUser: userId,
     });
+    setNewComment("");
     await fetchCommentsAndUsers();
-  };
+
+    // ✅ Gọi callback sau khi bình luận thành công
+    if (onCommentPosted) onCommentPosted();
+  } catch {
+    alert("Lỗi khi gửi bình luận");
+  }
+  setLoading(false);
+};
+
+
+const handleReplySubmit = async (parentId, replyContent) => {
+  await postComment({
+    [type === "doc" ? "docId" : "postId"]: id,
+    content: replyContent,
+    toReply: parentId,
+    idUser: userId,
+  });
+  await fetchCommentsAndUsers();
+
+  // ✅ Gọi callback để tăng commentsCount
+  if (onCommentPosted) onCommentPosted();
+};
+
 
   const rootComments = comments.filter((c) => !c.toReply);
 

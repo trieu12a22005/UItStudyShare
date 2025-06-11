@@ -60,7 +60,7 @@ function Statistics({ document }) {
   } = document || {};
 
   // Optional: Tính % tương đối cho progress bar
-  const total = views || 1;
+  const total = views +downloadCount + countRatings  || 1;
   const percentViews = (views / total) * 100;
   const percentDownloads = (downloadCount / total) * 100;
   const percentRatings = (countRatings / total) * 100;

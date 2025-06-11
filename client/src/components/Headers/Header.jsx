@@ -16,6 +16,7 @@ import './style.scss';
 import AuthButtons from '../Authbutton/Authbutton';
 import { useAuth } from '../../hooks/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { getUserById } from '../Service/DocumentService';
 
 const menuItems = [
   { label: 'Trang chủ', key: 'home' },
@@ -25,6 +26,8 @@ const menuItems = [
 
 function Header() {
   const { isLogin, logout, user } = useAuth() || {};
+
+    console.log('Header user:', user);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -127,10 +130,11 @@ function Header() {
                     >
                       <div className="flex items-center gap-2 cursor-pointer">
                         <Avatar
-                          style={{ backgroundColor: '#87d068' }}
-                          icon={<UserOutlined />}
-                          size={28}
-                        />
+  src={user?.avatar || null}
+  icon={!user?.avatar ? <UserOutlined /> : null}
+  size={28}
+/>
+
                         <Space>
                           <b>{user?.fullName || 'Người dùng'}</b>
                           <DownOutlined />

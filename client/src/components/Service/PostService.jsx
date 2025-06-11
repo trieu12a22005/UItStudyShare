@@ -1,4 +1,4 @@
-import { get, post, postform } from "../../utils/request";
+import { get, patch, postform } from "../../utils/request";
 
 export const getPosts = async () => {
   const result = await get(`posts`);
@@ -13,3 +13,7 @@ export const getAllCategories = async () => {
     return result;
   };
 
+export const toggleLikePost = async (postId, userId, token) => {
+  const result = await patch(`posts/like/${postId}`, { userId }, token);
+  return result;
+};

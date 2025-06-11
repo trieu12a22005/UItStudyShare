@@ -1,34 +1,34 @@
 import React from "react";
 
 function UploadStep3({ prev, formData }) {
-    const handleSubmit = async () => {
-        const form = new FormData();
-        form.append("file", formData.file);
-        form.append("title", formData.title);
-        form.append("description", formData.description);
-        form.append("type", "document");
-        form.append("Subject", formData.subject);
-      
-        try {
-          const response = await fetch("http://localhost:3055/api/v1/documents/upload", {
-            method: "POST",
-            credentials:"include",
-            body: form,
-          });
-      
-          const result = await response.json();
-          if (response.ok) {
-            alert("Tải lên thành công!");
-            console.log("Kết quả:", result);
-          } else {
-            alert("Thất bại: " + result.error);
-          }
-        } catch (err) {
-          console.error("Lỗi mạng:", err);
-          alert("Lỗi mạng khi gửi yêu cầu.");
-        }
-      };
-      
+  const handleSubmit = async () => {
+    const form = new FormData();
+    form.append("file", formData.file);
+    form.append("title", formData.title);
+    form.append("description", formData.description);
+    form.append("type", "document");
+    form.append("Subject", formData.subject);
+
+    try {
+      const response = await fetch("https://be-ltw.vercel.app/api/v1/documents/upload", {
+        method: "POST",
+        credentials: "include",
+        body: form,
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("Tải lên thành công!");
+        console.log("Kết quả:", result);
+      } else {
+        alert("Thất bại: " + result.error);
+      }
+    } catch (err) {
+      console.error("Lỗi mạng:", err);
+      alert("Lỗi mạng khi gửi yêu cầu.");
+    }
+  };
+
 
   return (
     <div className="bg-gray-50 min-h-screen py-8 px-4">
@@ -44,11 +44,10 @@ function UploadStep3({ prev, formData }) {
           {["Chọn tệp", "Thông tin", "Xác nhận"].map((label, index) => (
             <div key={index} className="text-center flex-1 relative">
               <div
-                className={`mx-auto w-8 h-8 rounded-full flex items-center justify-center border-2 ${
-                  index === 2
+                className={`mx-auto w-8 h-8 rounded-full flex items-center justify-center border-2 ${index === 2
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-gray-100 text-gray-500 border-gray-300"
-                }`}
+                  }`}
               >
                 {index + 1}
               </div>

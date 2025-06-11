@@ -24,7 +24,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
     (async () => {
       try {
-        const res = await fetch("http://localhost:3055/api/v1/users/detail", {
+        const res = await fetch("https://be-ltw.vercel.app/api/v1/users/detail", {
           method: "GET",
           credentials: "include",
         });
@@ -96,14 +96,14 @@ export default function EditProfileModal({ isOpen, onClose }) {
         Object.entries(diffPayload).forEach(([k, v]) => fd.append(k, v));
         fd.append("avatar", avatarFile); // field name 'avatar' backend phải support
 
-        res = await fetch("http://localhost:3055/api/v1/users/update", {
+        res = await fetch("https://be-ltw.vercel.app/api/v1/users/update", {
           method: "PATCH",
           credentials: "include",
           body: fd,
         });
       } else {
         // Chỉ thay text field ➜ gửi JSON
-        res = await fetch("http://localhost:3055/api/v1/users/update", {
+        res = await fetch("https://be-ltw.vercel.app/api/v1/users/update", {
           method: "PATCH",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -123,9 +123,8 @@ export default function EditProfileModal({ isOpen, onClose }) {
   /* ──────────────────────── JSX ──────────────────────── */
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center transition-all ${
-        isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-all ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+        }`}
     >
       <div
         onClick={onClose}
@@ -209,9 +208,8 @@ export default function EditProfileModal({ isOpen, onClose }) {
                 value={formData[name]}
                 onChange={handleChange}
                 disabled={disabled}
-                className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none ${
-                  disabled ? "bg-gray-100 text-gray-500" : "bg-white"
-                }`}
+                className={`w-full px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none ${disabled ? "bg-gray-100 text-gray-500" : "bg-white"
+                  }`}
               />
             </div>
           ))}

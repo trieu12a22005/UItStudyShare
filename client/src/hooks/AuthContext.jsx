@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('http://localhost:3055/api/v1/users/logout', {
+      await fetch('https://be-ltw.vercel.app/api/v1/users/logout', {
         method: 'POST',
         credentials: 'include',
       });

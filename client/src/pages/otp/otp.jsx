@@ -11,7 +11,7 @@ function Otp() {
   const handleOtp = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3055/api/v1/users/password/forgot",
+        "https://be-ltw.vercel.app/api/v1/users/password/forgot",
         {
           method: "POST",
           headers: {
@@ -35,13 +35,13 @@ function Otp() {
       toast.error(`Đăng nhập thất bại: ${error.message}`);
     }
   };
-  const onFinish = async (values) =>{
+  const onFinish = async (values) => {
     console.log(values)
-    try{
-        const response  = await fetch("http://localhost:3055/api/v1/users/password/otp",
-            {
-                method: "POST",
-                headers: {
+    try {
+      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/password/otp",
+        {
+          method: "POST",
+          headers: {
             "Content-Type": "application/json",
           },
           credentials: "include",
@@ -49,20 +49,20 @@ function Otp() {
             email: values.email,
             otp: values.otp,
           }),
-            }
-        )
-        const result  = await response.json();
-        if (!response.ok) {
-            throw new Error(`Lỗi ${result.code}: ${result.message}`);
-          }
-    
-          if (result) {
-            toast.success("Xác nhận thành công");
-            navigate("/reset-password")
-          }
-    }catch (error) {
-        toast.error(`Đăng nhập thất bại: ${error.message}`);
+        }
+      )
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`Lỗi ${result.code}: ${result.message}`);
       }
+
+      if (result) {
+        toast.success("Xác nhận thành công");
+        navigate("/reset-password")
+      }
+    } catch (error) {
+      toast.error(`Đăng nhập thất bại: ${error.message}`);
+    }
   }
   return (
     <div className="mt-[200px] ml-[500px] mr-[500px]">

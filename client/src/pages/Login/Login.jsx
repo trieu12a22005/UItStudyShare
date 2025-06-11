@@ -9,56 +9,56 @@ function Login() {
   const navigate = useNavigate();
 
   const onFinish = async (values) => {
-  try {
-    const response = await fetch("http://localhost:3055/api/v1/users/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
-      credentials: "include",
-    });
+    try {
+      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+        credentials: "include",
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(`Lỗi ${result.code}: ${result.message}`);
+      if (!response.ok) {
+        throw new Error(`Lỗi ${result.code}: ${result.message}`);
+      }
+
+      toast.success("Đăng nhập thành công");
+
+      // Gọi API /users/detail để lấy thông tin user
+      const userRes = await fetch("https://be-ltw.vercel.app/api/v1/users/detail", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const userData = await userRes.json();
+
+      if (!userRes.ok) {
+        throw new Error("Không lấy được thông tin người dùng");
+      }
+
+      console.log("✅ Thông tin user:", userData);
+
+      login(userData, result.accessToken); // ✅ TRUYỀN TOKEN vào đây
+      localStorage.setItem("user", JSON.stringify(userData)); // nếu bạn muốn lưu
+
+      navigate("/");
+
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error(`Đăng nhập thất bại: ${error.message}`);
     }
+  };
 
-    toast.success("Đăng nhập thành công");
 
-    // Gọi API /users/detail để lấy thông tin user
-    const userRes = await fetch("http://localhost:3055/api/v1/users/detail", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-
-    const userData = await userRes.json();
-
-    if (!userRes.ok) {
-      throw new Error("Không lấy được thông tin người dùng");
-    }
-
-    console.log("✅ Thông tin user:", userData);
-
-    login(userData, result.accessToken); // ✅ TRUYỀN TOKEN vào đây
-    localStorage.setItem("user", JSON.stringify(userData)); // nếu bạn muốn lưu
-
-    navigate("/");
-
-  } catch (error) {
-    console.error("Login error:", error);
-    toast.error(`Đăng nhập thất bại: ${error.message}`);
-  }
-};
-
-  
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -74,7 +74,7 @@ function Login() {
           Log in to UIT StudyShare
         </h1>
         <p className="text-center mb-6 text-gray-600">Enter your details below</p>
-        
+
         <Form
           name="login-form"
           className="w-full"

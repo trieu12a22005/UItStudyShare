@@ -64,7 +64,7 @@ export default function PostList() {
         hasLoaded.current = true;
         setLoading(true);
         try {
-            const res = await fetch("http://localhost:3055/api/v1/posts", {
+            const res = await fetch("https://be-ltw.vercel.app/api/v1/posts", {
                 method: "GET",
                 credentials: "include",
             });
@@ -83,7 +83,7 @@ export default function PostList() {
         isFetching.current = true;
         setLoadingMore(true);
         try {
-            const res = await fetch("http://localhost:3055/api/v1/posts", {
+            const res = await fetch("https://be-ltw.vercel.app/api/v1/posts", {
                 method: "GET",
                 credentials: "include",
             });

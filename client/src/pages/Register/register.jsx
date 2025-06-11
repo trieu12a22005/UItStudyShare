@@ -3,41 +3,41 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const onFinish = async (values) => {
-      console.log(values);
-      try {
-        const response = await fetch("http://localhost:3055/api/v1/users/register", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username: values.username,
-            fullName: values.fullname,
-            email: values.email,
-            password: values.password,
-          }),
-          credentials: "include",
-        });
-  
-        const result = await response.json();
-        if (!response.ok) {
-          throw new Error(`Lỗi ${result.code}: ${result.message}`);
-        }
-  
-        console.log(result);
-        toast.success("Đăng ký thành công!");
-  
-        // 👉 Chỉ chuyển hướng khi đăng ký thành công
-        navigate("/login");
-        
-      } catch (error) {
-        toast.error(`Đăng ký thất bại: ${error.message}`);
+  const onFinish = async (values) => {
+    console.log(values);
+    try {
+      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: values.username,
+          fullName: values.fullname,
+          email: values.email,
+          password: values.password,
+        }),
+        credentials: "include",
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(`Lỗi ${result.code}: ${result.message}`);
       }
-    };
-  
+
+      console.log(result);
+      toast.success("Đăng ký thành công!");
+
+      // 👉 Chỉ chuyển hướng khi đăng ký thành công
+      navigate("/login");
+
+    } catch (error) {
+      toast.error(`Đăng ký thất bại: ${error.message}`);
+    }
+  };
+
   return (
     <div className="flex justify-center max-h-screen">
       <div className="flex flex-col flex-[5] justify-center px-[130px] mt-[50px] mb-[50px]">
@@ -62,7 +62,7 @@ export default function Register() {
           initialValues={{
             remember: true,
           }}
-           onFinish={onFinish}
+          onFinish={onFinish}
           autoComplete="off"
         >
           <Form.Item

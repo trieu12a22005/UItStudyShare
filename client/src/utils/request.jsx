@@ -1,5 +1,5 @@
 
-const API_DOMAIN =("http://localhost:3055/api/v1/"
+const API_DOMAIN = ("https://be-ltw.vercel.app/api/v1/"
 )
 export const get = async (path) => {
     if (!API_DOMAIN) {
@@ -25,12 +25,12 @@ export const get = async (path) => {
     }
 };
 
-export const post = async (path, options) =>{
+export const post = async (path, options) => {
     const response = await fetch(API_DOMAIN + path, {
         method: "POST",
-        headers:{
+        headers: {
             Accept: "application/json",
-            "Content-Type":"application/json",
+            "Content-Type": "application/json",
         },
         body: JSON.stringify(options),
         credentials: "include",
@@ -39,13 +39,13 @@ export const post = async (path, options) =>{
     return result;
 }
 export const postform = async (path, formData) => {
-  const response = await fetch(API_DOMAIN + path, {
-    method: "POST",
-    body: formData, // body là FormData
-    credentials: "include",
-  });
-  const result = await response.json();
-  return result;
+    const response = await fetch(API_DOMAIN + path, {
+        method: "POST",
+        body: formData, // body là FormData
+        credentials: "include",
+    });
+    const result = await response.json();
+    return result;
 };
 
 

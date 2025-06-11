@@ -14,7 +14,7 @@
 //   useEffect(() => {
 //     const fetchApi = async () => {
 //       try {
-//         const response = await fetch("http://localhost:3055/api/v1/users/detail", {
+//         const response = await fetch("https://be-ltw.vercel.app/api/v1/users/detail", {
 //           method: "GET",
 //           headers: { "Content-Type": "application/json" },
 //           credentials: "include",
@@ -155,32 +155,32 @@ import Footer from "../../components/Footer/Footer";
 import ProfileDocList from "../../components/Profile/Profiledoclist";
 
 function Profile({ user, onSave }) {
-  
 
-  
+
+
 
   return (
-   <>
-   <ProfileHeader />
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-  <div className="flex flex-col lg:flex-row gap-8">
-    {/* LEFT: Sidebar */}
-    <div className="w-full lg:w-1/3">
-      <AboutSidebar />
-    </div>
+    <>
+      <ProfileHeader />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* LEFT: Sidebar */}
+          <div className="w-full lg:w-1/3">
+            <AboutSidebar />
+          </div>
 
-    {/* RIGHT: Content */}
-    <div className="w-full lg:w-2/3">
-      {/* <DocumentFilters /> */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
-        <ProfileDocList />
+          {/* RIGHT: Content */}
+          <div className="w-full lg:w-2/3">
+            {/* <DocumentFilters /> */}
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6"> */}
+            <ProfileDocList />
+          </div>
+          {/* </div> */}
+        </div>
       </div>
-    {/* </div> */}
-  </div>
-</div>
 
-    <EditProfileModal />
-   </>
+      <EditProfileModal />
+    </>
   );
 }
 

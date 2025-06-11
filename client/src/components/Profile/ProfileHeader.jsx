@@ -32,16 +32,16 @@ const handleShareClick = () => {
     })
     .catch(() => toast.error("Không thể sao chép liên kết!"));
 };
-
+console.log("Profile data:", data);
   return (
     <>
-      <div className="bg-[#3188F2] text-white">
+      <div className="bg-[#1677ff] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row items-center">
             <div className="mb-6 md:mb-0 md:mr-8">
               <Avatar
                 size={128}
-                src={data.avatarUrl || null}
+                src={data.avatar || null}
                 style={{ backgroundColor: "#87d068" }}
                 icon={!data.avatarUrl && <UserOutlined />}
               />

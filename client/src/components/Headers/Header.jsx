@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ConfigProvider,
   Dropdown,
@@ -17,6 +17,7 @@ import AuthButtons from '../Authbutton/Authbutton';
 import { useAuth } from '../../hooks/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserById } from '../Service/DocumentService';
+import { get } from '../../utils/request';
 
 const menuItems = [
   { label: 'Trang chủ', key: 'home' },
@@ -26,7 +27,19 @@ const menuItems = [
 
 function Header() {
   const { isLogin, logout, user } = useAuth() || {};
-
+const [data, setData] = useState({});
+useEffect(() => {
+    const fetchApi = async () => {
+      try {
+        const result = await get("users/detail");
+        setData(result);
+      } catch (error) {
+        console.error("Fetch user error:", error);
+      }
+    };
+    fetchApi();
+  }, []);
+  console.log('Header data:', data);
     console.log('Header user:', user);
   const navigate = useNavigate();
   const location = useLocation();
@@ -130,8 +143,8 @@ function Header() {
                     >
                       <div className="flex items-center gap-2 cursor-pointer">
                         <Avatar
-  src={user?.avatar || null}
-  icon={!user?.avatar ? <UserOutlined /> : null}
+  src={data?.avatar || null}
+  icon={!data?.avatar ? <UserOutlined /> : null}
   size={28}
 />
 

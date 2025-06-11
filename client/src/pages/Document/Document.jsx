@@ -103,7 +103,6 @@ function Document() {
         <span className="text-sm">Chat cùng AI</span>
       </button>
       <AIAssistantModal chatData={chatData} open={open} setOpen={setOpen} />
-      <Footer />
     </>
   );
 }

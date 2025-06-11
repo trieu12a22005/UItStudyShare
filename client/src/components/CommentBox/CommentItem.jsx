@@ -3,7 +3,10 @@ import { changeComment, deleteComment } from "../Service/DocumentService";
 import { toast } from "react-toastify";
 const CommentItem = ({ comment, userMap, getReplies, onSubmitReply, onRefresh }) => {
 
-  const username = userMap[comment.idUser] || "Ẩn danh";
+  const userInfo = userMap[comment.idUser] || { name: "Ẩn danh", avatar: null };
+const username = userInfo.name;
+const userAvatar = userInfo.avatar;
+
   const [isReplying, setIsReplying] = useState(false);
   const [replyContent, setReplyContent] = useState("");
   const [replyLoading, setReplyLoading] = useState(false);
@@ -44,9 +47,20 @@ const CommentItem = ({ comment, userMap, getReplies, onSubmitReply, onRefresh })
 
   return (
     <div className="flex items-start mt-4" key={comment._id}>
-      <div className="w-10 h-10 bg-blue-100 rounded-full flex justify-center items-center text-blue-600 mr-3">
-        <i className="fas fa-user" />
-      </div>
+      <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
+  {userAvatar ? (
+    <img
+      src={userAvatar}
+      alt={username}
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="w-full h-full bg-blue-100 text-blue-600 flex items-center justify-center">
+      <i className="fas fa-user" />
+    </div>
+  )}
+</div>
+
       <div className="flex-1">
         <div className="bg-gray-50 rounded-lg p-4">
           <h4 className="font-medium text-gray-800">{username}</h4>

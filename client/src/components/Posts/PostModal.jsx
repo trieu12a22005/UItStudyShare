@@ -85,7 +85,7 @@ useEffect(() => {
 
               // Thêm các category
               selectedCategories.forEach((catId) => {
-                formData.append("category", catId);
+                formData.append("category[]", catId);
               });
 
               // Thêm file

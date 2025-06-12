@@ -13,7 +13,7 @@ function ChangePassword() {
       return;
     }
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/password/change", {
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/users/password/change", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

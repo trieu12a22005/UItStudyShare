@@ -8,7 +8,7 @@ export default function Register() {
   const onFinish = async (values) => {
     console.log(values);
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/register", {
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

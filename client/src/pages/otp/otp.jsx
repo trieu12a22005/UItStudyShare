@@ -11,7 +11,7 @@ function Otp() {
   const handleOtp = async () => {
     try {
       const response = await fetch(
-        "https://be-ltw.vercel.app/api/v1/users/password/forgot",
+        "https://beltw-production.up.railway.app/api/v1/users/password/forgot",
         {
           method: "POST",
           headers: {
@@ -38,7 +38,7 @@ function Otp() {
   const onFinish = async (values) => {
     console.log(values)
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/password/otp",
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/users/password/otp",
         {
           method: "POST",
           headers: {

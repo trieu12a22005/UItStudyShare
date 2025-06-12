@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await fetch('https://be-ltw.vercel.app/api/v1/users/logout', {
+      await fetch('https://beltw-production.up.railway.app/api/v1/users/logout', {
         method: 'POST',
         credentials: 'include',
       });

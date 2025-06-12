@@ -7,7 +7,7 @@ function ResetPassword() {
   const onFinish = async (values) => {
     console.log(values.Password);
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/password/reset", {
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/users/password/reset", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -22,7 +22,7 @@ function Document() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch('https://be-ltw.vercel.app/api/v1/categories', {
+        const response = await fetch('https://beltw-production.up.railway.app/api/v1/categories', {
           method: 'GET',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' }
@@ -43,7 +43,7 @@ function Document() {
       try {
         let result;
         if (selectedCategory && selectedCategory.id) {
-          const response = await fetch(`https://be-ltw.vercel.app/api/v1/documents/byCategory/${selectedCategory.id}`, {
+          const response = await fetch(`https://beltw-production.up.railway.app/api/v1/documents/byCategory/${selectedCategory.id}`, {
             method: 'GET',
             credentials: 'include'
           });

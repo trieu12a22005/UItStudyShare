@@ -10,7 +10,7 @@ function Login() {
 
   const onFinish = async (values) => {
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/users/login", {
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,7 +31,7 @@ function Login() {
       toast.success("Đăng nhập thành công");
 
       // Gọi API /users/detail để lấy thông tin user
-      const userRes = await fetch("https://be-ltw.vercel.app/api/v1/users/detail", {
+      const userRes = await fetch("https://beltw-production.up.railway.app/api/v1/users/detail", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

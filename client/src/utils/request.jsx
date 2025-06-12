@@ -1,5 +1,5 @@
 
-const API_DOMAIN = ("https://be-ltw.vercel.app/api/v1/"
+const API_DOMAIN = ("https://beltw-production.up.railway.app/api/v1/"
 )
 export const get = async (path) => {
     if (!API_DOMAIN) {

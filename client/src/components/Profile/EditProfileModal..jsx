@@ -24,7 +24,7 @@ export default function EditProfileModal({ isOpen, onClose }) {
 
     (async () => {
       try {
-        const res = await fetch("https://be-ltw.vercel.app/api/v1/users/detail", {
+        const res = await fetch("https://beltw-production.up.railway.app/api/v1/users/detail", {
           method: "GET",
           credentials: "include",
         });
@@ -96,14 +96,14 @@ export default function EditProfileModal({ isOpen, onClose }) {
         Object.entries(diffPayload).forEach(([k, v]) => fd.append(k, v));
         fd.append("avatar", avatarFile); // field name 'avatar' backend phải support
 
-        res = await fetch("https://be-ltw.vercel.app/api/v1/users/update", {
+        res = await fetch("https://beltw-production.up.railway.app/api/v1/users/update", {
           method: "PATCH",
           credentials: "include",
           body: fd,
         });
       } else {
         // Chỉ thay text field ➜ gửi JSON
-        res = await fetch("https://be-ltw.vercel.app/api/v1/users/update", {
+        res = await fetch("https://beltw-production.up.railway.app/api/v1/users/update", {
           method: "PATCH",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

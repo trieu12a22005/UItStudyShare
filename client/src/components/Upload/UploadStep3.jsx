@@ -10,7 +10,7 @@ function UploadStep3({ prev, formData }) {
     form.append("Subject", formData.subject);
 
     try {
-      const response = await fetch("https://be-ltw.vercel.app/api/v1/documents/upload", {
+      const response = await fetch("https://beltw-production.up.railway.app/api/v1/documents/upload", {
         method: "POST",
         credentials: "include",
         body: form,
@@ -45,8 +45,8 @@ function UploadStep3({ prev, formData }) {
             <div key={index} className="text-center flex-1 relative">
               <div
                 className={`mx-auto w-8 h-8 rounded-full flex items-center justify-center border-2 ${index === 2
-                    ? "bg-blue-600 text-white border-blue-600"
-                    : "bg-gray-100 text-gray-500 border-gray-300"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-gray-100 text-gray-500 border-gray-300"
                   }`}
               >
                 {index + 1}

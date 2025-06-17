@@ -13,7 +13,7 @@ function Footer ()
           <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white mr-2">
             <i className="fas fa-book-open" />
           </div>
-          UIT Share
+          UIT Study Share
         </h3>
         <p className="text-gray-400 text-sm">Nền tảng chia sẻ tài liệu học tập cho giáo viên và sinh viên Việt
           Nam.</p>
@@ -55,7 +55,7 @@ function Footer ()
       </div>
     </div>
     <div className="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
-      <p>© 2025 UITShare. Bảo lưu mọi quyền.</p>
+      <p>© 2025 UITStudyShare. Bảo lưu mọi quyền.</p>
     </div>
   </div>
 </footer>

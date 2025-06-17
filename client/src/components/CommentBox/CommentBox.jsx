@@ -16,7 +16,7 @@ function CommentBox({ token, userId, id: propId, type = "doc", onCommentPosted }
   const [userMap, setUserMap] = useState({});
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
-    
+
   const fetchCommentsAndUsers = async () => {
     try {
       const data = await getCommentByType(id);
@@ -39,20 +39,20 @@ function CommentBox({ token, userId, id: propId, type = "doc", onCommentPosted }
       setUserMap({});
     }
   };
-useEffect(() => {
-  if (!userId) return;
-  const fetchCurrentUser = async () => {
-    try {
-      const userInfo = await getUserById(userId);
-      setUser(userInfo);
-    } catch (err) {
-      console.error("Lỗi lấy thông tin user hiện tại:", err);
-      setUser(null); // fallback về null nếu lỗi
-    }
-  };
-  fetchCurrentUser();
-}, [userId]);
-console.log("user:", user);
+  useEffect(() => {
+    if (!userId) return;
+    const fetchCurrentUser = async () => {
+      try {
+        const userInfo = await getUserById(userId);
+        setUser(userInfo);
+      } catch (err) {
+        console.error("Lỗi lấy thông tin user hiện tại:", err);
+        setUser(null); // fallback về null nếu lỗi
+      }
+    };
+    fetchCurrentUser();
+  }, [userId]);
+  console.log("user:", user);
   useEffect(() => {
     if (id) fetchCommentsAndUsers();
   }, [id, type]);
@@ -107,40 +107,55 @@ console.log("user:", user);
       <div className="bg-gray-50 rounded-lg p-4 mb-6">
         <div className="flex items-start">
           <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
-  {user?.avatar ? (
-    <img
-      src={user.avatar}
-      alt={user.fullName || "avatar"}
-      className="w-full h-full object-cover"
-    />
-  ) : (
-    <div className="w-full h-full bg-blue-100 text-blue-600 flex items-center justify-center">
-      <i className="fas fa-user" />
-    </div>
-  )}
-</div>
+            {user?.avatar ? (
+              <img
+                src={user.avatar}
+                alt={user.fullName || "avatar"}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-blue-100 text-blue-600 flex items-center justify-center">
+                <i className="fas fa-user" />
+              </div>
+            )}
+          </div>
 
           <div className="flex-1">
-            <textarea
-              className="w-full px-3 py-2 rounded"
-              rows={3}
-              placeholder="Viết bình luận..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              disabled={loading}
-            />
-            <div className="flex justify-end mt-2">
-              <button
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                onClick={handleSubmit}
-                disabled={loading}
-              >
-                {loading ? "Đang gửi..." : "Đăng bình luận"}
-              </button>
-            </div>
+            {userId ? (
+              <>
+                <textarea
+                  className="w-full px-3 py-2 rounded"
+                  rows={3}
+                  placeholder="Viết bình luận..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  disabled={loading}
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                    onClick={handleSubmit}
+                    disabled={loading}
+                  >
+                    {loading ? "Đang gửi..." : "Đăng bình luận"}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="text-center w-full">
+                <p className="text-gray-500 mb-2">Bạn cần đăng nhập để bình luận.</p>
+                <a
+                  href="/login"
+                  className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                >
+                  Đăng nhập ngay
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>
+
 
       <div className="space-y-4">
         {rootComments.length > 0 ? (

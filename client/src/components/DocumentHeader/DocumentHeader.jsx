@@ -16,6 +16,7 @@ function DocumentHeader({ document, token, userId }) {
   const [userScore, setUserScore] = useState(null);
   const [categoryNames, setCategoryNames] = useState({});
   const [showReportModal, setShowReportModal] = useState(false);
+
   useEffect(() => {
     const uploaderId = document?.uploadedBy;
     if (uploaderId) {
@@ -65,7 +66,6 @@ function DocumentHeader({ document, token, userId }) {
     fetchCategoryNames();
   }, [document]);
 
-
   if (!document) return null;
 
   const {
@@ -73,9 +73,7 @@ function DocumentHeader({ document, token, userId }) {
     createdAt,
     downloadCount,
     category,
-    Subject,
     type,
-    fileUrl,
     avgRating
   } = document;
 
@@ -83,6 +81,10 @@ function DocumentHeader({ document, token, userId }) {
     dateStr ? new Date(dateStr).toLocaleDateString("vi-VN") : "Chưa rõ ngày";
 
   const handleDownload = async () => {
+    if (!userId) {
+      toast.error("Bạn cần đăng nhập để tải xuống.");
+      return;
+    }
     try {
       const blob = await increaseDownloadCount(document._id);
       toast.success("Bắt đầu tải xuống...");
@@ -102,30 +104,21 @@ function DocumentHeader({ document, token, userId }) {
   };
 
   const handleShare = () => {
+    if (!userId) {
+      toast.error("Bạn cần đăng nhập để chia sẻ.");
+      return;
+    }
     const url = window.location.href;
     navigator.clipboard.writeText(url)
       .then(() => toast.info("Đã sao chép liên kết chia sẻ!"))
       .catch(() => toast.error("Không thể sao chép liên kết!"));
   };
 
- const handleReportSubmit = async (e) => {
-  e.preventDefault();
-  const reason = e.target.reason.value;
-  const details = e.target.details.value;
-  const confidential = e.target.confidential?.checked ?? false;
-
-  try {
-    await postReportDocument(document._id, reason, details, token);
-    toast.success("Cảm ơn bạn đã báo cáo. Chúng tôi sẽ xem xét trong thời gian sớm nhất.");
-    setShowReportModal(false);
-  } catch (err) {
-    console.error("Lỗi khi gửi báo cáo:", err);
-    toast.error("Không thể gửi báo cáo. Vui lòng thử lại sau.");
-  }
-};
-
-
   const submitRating = async () => {
+    if (!userId) {
+      toast.error("Bạn cần đăng nhập để đánh giá.");
+      return;
+    }
     if (submitted) {
       toast.warn("Bạn đã đánh giá tài liệu này rồi.");
       return;
@@ -143,6 +136,25 @@ function DocumentHeader({ document, token, userId }) {
       }
     } else {
       toast.error("Vui lòng chọn ít nhất 1 sao.");
+    }
+  };
+
+  const handleReportSubmit = async (e) => {
+    e.preventDefault();
+    if (!userId) {
+      toast.error("Bạn cần đăng nhập để báo cáo.");
+      return;
+    }
+    const reason = e.target.reason.value;
+    const details = e.target.details.value;
+
+    try {
+      await postReportDocument(document._id, reason, details, token);
+      toast.success("Cảm ơn bạn đã báo cáo. Chúng tôi sẽ xem xét trong thời gian sớm nhất.");
+      setShowReportModal(false);
+    } catch (err) {
+      console.error("Lỗi khi gửi báo cáo:", err);
+      toast.error("Không thể gửi báo cáo. Vui lòng thử lại sau.");
     }
   };
 
@@ -192,7 +204,6 @@ function DocumentHeader({ document, token, userId }) {
 
           <div className="flex flex-wrap gap-2 mb-4">
             <span className="px-3 py-1 bg-purple-50 text-purple-600 rounded-full text-xs font-medium capitalize">{type}</span>
-
             {document.category?.map((cat, index) => {
               const categoryId = cat.categoryId;
               const categoryName = categoryNames[categoryId] || "Đang tải...";
@@ -225,7 +236,13 @@ function DocumentHeader({ document, token, userId }) {
             </button>
 
             <button
-              onClick={() => setShowRating(!showRating)}
+              onClick={() => {
+                if (!userId) {
+                  toast.error("Bạn cần đăng nhập để đánh giá.");
+                  return;
+                }
+                setShowRating(!showRating);
+              }}
               disabled={submitted}
               className="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg font-medium border border-gray-300 flex items-center"
             >
@@ -241,12 +258,17 @@ function DocumentHeader({ document, token, userId }) {
             </button>
 
             <button
-              onClick={() => setShowReportModal(true)}
+              onClick={() => {
+                if (!userId) {
+                  toast.error("Bạn cần đăng nhập để báo cáo.");
+                  return;
+                }
+                setShowReportModal(true);
+              }}
               className="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 rounded-lg font-medium border border-gray-300 flex items-center"
             >
               <i className="fas fa-flag mr-2 text-orange-500" /> Báo cáo
             </button>
-
           </div>
 
           {showRating && !submitted && (

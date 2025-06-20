@@ -1,8 +1,19 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import PostModal from "./PostModal";
+import { useAuth } from "../../hooks/AuthContext"; // giả định bạn dùng AuthContext
 
 function PostHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isLogin } = useAuth() || {}; // nếu bạn có context xác thực
+
+  const handleOpenModal = () => {
+    if (!isLogin) {
+      toast.error("Bạn cần đăng nhập để đăng bài.");
+      return;
+    }
+    setIsModalOpen(true);
+  };
 
   return (
     <>
@@ -14,16 +25,16 @@ function PostHeader() {
         </section>
       </main>
 
-      {/* ✅ Nút tròn tạo bài viết nằm góc phải dưới */}
+      {/* Nút tròn tạo bài viết */}
       <button
         className="fixed bottom-6 right-6 w-14 h-14 bg-[#3188F2] text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-600 transition z-50"
-        onClick={() => setIsModalOpen(true)}
+        onClick={handleOpenModal}
       >
         <i className="fas fa-plus text-xl" />
       </button>
 
-      {/* ✅ Modal tạo bài viết */}
-      <PostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* Modal tạo bài viết */}
+      <PostModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} isLogin={isLogin} />
     </>
   );
 }

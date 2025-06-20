@@ -20,7 +20,8 @@ export default function DocumentCard({ item }) {
     type,
     title,
     avgRating,
-    _id: id
+    _id: id,
+    slug
   } = item;
 
   const { icon, color } = iconMap[fileType] || iconMap["UNKNOWN"];
@@ -37,26 +38,44 @@ export default function DocumentCard({ item }) {
     }
   }, [item.uploadedBy]);
 
+  const handleNavigate = async () => {
+    if (slug) {
+      navigate(`/documents/${slug}`);
+    } else {
+      try {
+        const res = await fetch(`https://beltw-production.up.railway.app/api/v1/documents/detail/${id}`, {
+          credentials: 'include'
+        });
+        if (res.redirected) {
+          const newUrl = res.url.replace('https://beltw-production.up.railway.app', '');
+          navigate(newUrl);
+        } else {
+          const data = await res.json();
+          if (data.document?.slug) {
+            navigate(`/documents/${data.document.slug}`);
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi lấy slug:", error);
+      }
+    }
+  };
+
   return (
-   <div className="profiledoc-card bg-white rounded-lg shadow overflow-hidden transition duration-300 w-full min-w-[250px] h-full flex flex-col justify-between">
-      <div className="p-4 cursor-pointer" onClick={() => navigate(`/documents/detail/${id}`)}>
+    <div className="profiledoc-card bg-white rounded-lg shadow overflow-hidden transition duration-300 w-full min-w-[250px] h-full flex flex-col justify-between">
+      <div className="p-4 cursor-pointer" onClick={handleNavigate}>
         <div className="flex justify-between items-start mb-2">
           <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">
             {type || "Tài liệu"}
           </span>
           <div className="flex items-center text-yellow-400">
             <i className="fas fa-star"></i>
-            <span className="ml-1 text-gray-700 font-medium">{avgRating.toFixed(1) || "?"}</span>
+            <span className="ml-1 text-gray-700 font-medium">{avgRating?.toFixed(1) || "?"}</span>
           </div>
         </div>
 
         <h3 className="text-lg font-bold mb-2 line-clamp-2">{title}</h3>
         <p className="text-gray-600 text-sm mb-4 line-clamp-3">{desc}</p>
-
-        {/* <div className="flex items-center text-gray-500 text-sm">
-          <i className={`fas ${icon} mr-2 ${color}`}></i>
-          <span>{fileType} • {fileSize}</span>
-        </div> */}
 
         <div className="text-xs text-gray-400 mt-1">Người đăng: {uploaderName}</div>
       </div>
@@ -67,7 +86,7 @@ export default function DocumentCard({ item }) {
           <span>{item.downloadCount || 0} downloads</span>
         </div>
         <div className="flex space-x-2">
-          <Link to={`/documents/detail/${id}`} className="text-indigo-600 hover:text-indigo-800">
+          <Link to={slug ? `/documents/${slug}` : `/documents/detail/${id}`} className="text-indigo-600 hover:text-indigo-800">
             <i className="fas fa-eye"></i>
           </Link>
           <button className="text-indigo-600 hover:text-indigo-800">

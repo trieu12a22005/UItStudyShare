@@ -1,7 +1,7 @@
 import { IoDocumentAttachOutline } from "react-icons/io5";
 import { FaDownload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { getUserById } from "../../components/Service/DocumentService";
+import { getUserById, getDocumentById } from "../../components/Service/DocumentService";
 import { useEffect, useState } from "react";
 function DocumentItem({ props }) {
   const { item } = props;
@@ -20,9 +20,13 @@ function DocumentItem({ props }) {
     }
   }, [item.uploadedBy]);
 
-  const handleClick = () => {
-    navigate(`/documents/detail/${item._id}`);
-  };
+ const handleClick = async () => {
+  try {
+    navigate(`/documents/${item.slug}`);
+  } catch (error) {
+    console.error("Không lấy được slug:", error);
+  }
+};
 
   const formatCategoryName = (cat) =>
     cat

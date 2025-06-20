@@ -12,7 +12,9 @@ export const findDocument = async (search, page) => {
 export const getDocumentById = async (id) => {
   return await get(`documents/detail/${id}`);
 };
-
+export const getDocumentBySlug = async (slug) => {
+  return await get(`documents/${slug}`);
+};
 export const getNameCategoryById = async (id) => {
   return await get(`categories/${id}`);
 };

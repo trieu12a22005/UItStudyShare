@@ -28,7 +28,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/password/change" element={<ChangePassword/>} />
         <Route path="/documents" element={<Document />} />
-        <Route path="/documents/detail/:id"  element={<DocumentDetail />} />
+        <Route path="/documents/:slug" element={<DocumentDetail />} />
         <Route path="/documents/upload" element={<UploadFlow />} />
         <Route path="/community" element={<Posts />} />
       </Routes>

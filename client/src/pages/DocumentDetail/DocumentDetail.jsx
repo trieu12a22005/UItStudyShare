@@ -1,7 +1,7 @@
 // src/pages/DocumentDetail.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getDocumentById } from '../../components/Service/DocumentService';
+import { getDocumentById, getDocumentBySlug } from '../../components/Service/DocumentService';
 import { useAuth } from '../../hooks/AuthContext'; // ✅ thêm dòng này
 
 import DocumentContent from '../../components/DocumentContent/DocumentContent';
@@ -13,7 +13,7 @@ import DocumentHeader from '../../components/DocumentHeader/DocumentHeader';
 import "./DocumentDetail.css";
 
 const DocumentDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,7 @@ const DocumentDetail = () => {
   useEffect(() => {
     const fetchDocument = async () => {
       try {
-        const data = await getDocumentById(id);
+        const data = await getDocumentBySlug(slug);
         setDocument(data.document); // ✅ lấy object document từ API
       } catch (error) {
         console.error("Lỗi tải chi tiết tài liệu:", error);
@@ -32,7 +32,7 @@ const DocumentDetail = () => {
     };
 
     fetchDocument();
-  }, [id]);
+  }, [slug]);
   // console.log("authUser:", authUser);
 
   if (loading) {
